@@ -1,12 +1,17 @@
 package com.SportMingle.servicios_SportMingle.Model;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "usuarios")
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +21,8 @@ public class Usuario {
     @Column(nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(name = "contraseña_hash", nullable = false, length = 255)
-    private String contraseñaHash;
+    @Column(name = "password_hash", nullable = false, length = 255)
+    private String passwordHash;
 
     @Column(nullable = false, length = 100)
     private String nombre;
@@ -31,7 +36,7 @@ public class Usuario {
     @Column(name = "foto_perfil", length = 255)
     private String fotoPerfil;
 
-    @Column(name = "numero_cedula", length = 255)
+    @Column(name = "numero_cedula", length = 255, nullable = false)
     private String numeroCedula;
 
     @Enumerated(EnumType.STRING)
@@ -48,6 +53,41 @@ public class Usuario {
 
     @Column(columnDefinition = "TEXT")
     private String biografia;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+        return "";
+    }
+
+    @Override
+    public String getUsername() {
+        return "";
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
 
     // Enum
     public enum TipoUsuario {
@@ -75,12 +115,12 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getContraseñaHash() {
-        return contraseñaHash;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setContraseñaHash(String contraseñaHash) {
-        this.contraseñaHash = contraseñaHash;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public String getNombre() {

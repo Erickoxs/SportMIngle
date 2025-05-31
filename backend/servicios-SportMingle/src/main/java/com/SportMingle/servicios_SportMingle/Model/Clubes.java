@@ -31,8 +31,14 @@ public class Clubes {
     @Column(name = "Deporte", length = 50, nullable = false)
     private String deporte;
 
-    @Column(name = "Ubicacion", length = 255, nullable = false)
-    private String ubicacion;
+    @Column(name = "direccion", length = 255)
+    private String direccion;
+
+    @Column(nullable = false)
+    private Double latitud;
+
+    @Column(nullable = false)
+    private Double longitud;
 
 
     public Clubes() {
@@ -92,11 +98,27 @@ public class Clubes {
         this.deporte = deporte;
     }
 
-    public String getUbicacion() {
-        return ubicacion;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public Double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
     }
 }

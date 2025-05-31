@@ -1,10 +1,12 @@
 package com.SportMingle.servicios_SportMingle.Controller;
 
 import com.SportMingle.servicios_SportMingle.Model.Usuario;
+import com.SportMingle.servicios_SportMingle.Security.JwtUtil;
 import com.SportMingle.servicios_SportMingle.Service.UsuarioService;
 import com.SportMingle.servicios_SportMingle.dto.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,17 +14,23 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
+    private final JwtUtil jwtUtil;
     private final UsuarioService usuarioService;
     private final AuthenticationManager authenticationManager;
 
+
+
     @Autowired
-    public UsuarioController(UsuarioService usuarioService, AuthenticationManager authenticationManager) {
+    public UsuarioController(UsuarioService usuarioService, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         this.usuarioService = usuarioService;
         this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping
@@ -32,11 +40,8 @@ public class UsuarioController {
 
     @PostMapping("/login")
 
-    public String login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-
-            System.out.println("Email: " + loginRequest.getEmail());
-            System.out.println("Contrasena: " + loginRequest.getPasswordHash());
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequest.getEmail(),
@@ -44,10 +49,13 @@ public class UsuarioController {
                     )
             );
 
-            // Aquí normalmente generarías y devolverías un JWT
-            return "Login exitoso para el usuario: " + loginRequest.getEmail();
+            String token = jwtUtil.generarToken(loginRequest.getEmail());
+
+            return ResponseEntity.ok().body(Map.of("token", token));
+
         } catch (AuthenticationException ex) {
-            return "Error de autenticación: email o contraseña incorrectos";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Email o contraseña incorrectos"));
         }
     }
 }

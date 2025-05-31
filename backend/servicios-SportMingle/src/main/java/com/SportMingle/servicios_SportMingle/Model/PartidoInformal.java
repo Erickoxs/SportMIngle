@@ -23,8 +23,14 @@ public class PartidoInformal {
     @Column(name = "fecha_hora", nullable = false)
     private LocalDateTime fechaHora;
 
-    @Column(name = "ubicacion", nullable = false, length = 255)
-    private String ubicacion;
+    @Column(name = "direccion", length = 255)
+    private String direccion;
+
+    @Column(nullable = false)
+    private Double latitud;
+
+    @Column(nullable = false)
+    private Double longitud;
 
     @Column(name = "max_jugadores")
     private Integer maxJugadores;
@@ -96,12 +102,20 @@ public class PartidoInformal {
         this.fechaHora = fechaHora;
     }
 
-    public String getUbicacion() {
-        return ubicacion;
+    public Double getLatitud() {
+        return latitud;
     }
 
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
     }
 
     public Integer getMaxJugadores() {

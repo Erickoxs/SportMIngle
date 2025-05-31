@@ -44,8 +44,14 @@ public class Torneo {
     @Column(name = "fecha_fin", nullable = false)
     private LocalDate fechaFin;
 
-    @Column(name = "ubicacion", length = 255, nullable = false)
-    private String ubicacion;
+    @Column(name = "direccion", length = 255)
+    private String direccion;
+
+    @Column(nullable = false)
+    private Double latitud;
+
+    @Column(nullable = false)
+    private Double longitud;
 
     @Column(name = "numero_fases")
     private Integer numeroFases; // máximo 3 fases (puedes validar en lógica de negocio)
@@ -138,12 +144,28 @@ public class Torneo {
         this.fechaFin = fechaFin;
     }
 
-    public String getUbicacion() {
-        return ubicacion;
+    public String getDireccion() {
+        return direccion;
     }
 
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public Double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(Double latitud) {
+        this.latitud = latitud;
+    }
+
+    public Double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(Double longitud) {
+        this.longitud = longitud;
     }
 
     public Integer getNumeroFases() {

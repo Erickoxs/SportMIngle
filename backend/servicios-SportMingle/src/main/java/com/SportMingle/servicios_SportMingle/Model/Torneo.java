@@ -14,7 +14,7 @@ public class Torneo {
     }
 
     public enum EstadoTorneo {
-        planificado, inscripciones, en_progreso, finalizado, cancelado
+        inscripciones, en_progreso, finalizado, cancelado
     }
 
     @Id
@@ -56,10 +56,6 @@ public class Torneo {
     @Column(name = "numero_fases")
     private Integer numeroFases; // máximo 3 fases (puedes validar en lógica de negocio)
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "formato_torneo")
-    private FormatoTorneo formatoTorneo;
-
     @Column(name = "reglas", columnDefinition = "TEXT")
     private String reglas;
 
@@ -74,7 +70,7 @@ public class Torneo {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado", nullable = false)
-    private EstadoTorneo estado = EstadoTorneo.planificado;
+    private EstadoTorneo estado = EstadoTorneo.inscripciones;
 
     @Column(name = "imagen_torneo", length = 255)
     private String imagenTorneo;
@@ -174,14 +170,6 @@ public class Torneo {
 
     public void setNumeroFases(Integer numeroFases) {
         this.numeroFases = numeroFases;
-    }
-
-    public FormatoTorneo getFormatoTorneo() {
-        return formatoTorneo;
-    }
-
-    public void setFormatoTorneo(FormatoTorneo formatoTorneo) {
-        this.formatoTorneo = formatoTorneo;
     }
 
     public String getReglas() {

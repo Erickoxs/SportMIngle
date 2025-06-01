@@ -17,9 +17,6 @@ public class Deporte {
     @Column(name = "descripcion", columnDefinition = "TEXT")
     private String descripcion;
 
-    @Column(name = "imagen", length = 255)
-    private String imagen;
-
     // Constructor vacío
     public Deporte() {}
 
@@ -47,13 +44,5 @@ public class Deporte {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public String getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
     }
 }

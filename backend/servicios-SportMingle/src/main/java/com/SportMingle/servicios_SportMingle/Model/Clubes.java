@@ -28,8 +28,9 @@ public class Clubes {
     @Column(name = "fechaFundacion",  nullable = false)
     private LocalDate fechaFundacion;
 
-    @Column(name = "Deporte", length = 50, nullable = false)
-    private String deporte;
+    @ManyToOne
+    @JoinColumn(name = "id_deporte", nullable = false)
+    private Deporte deporte;
 
     @Column(name = "direccion", length = 255)
     private String direccion;
@@ -90,11 +91,11 @@ public class Clubes {
         this.fechaFundacion = fechaFundacion;
     }
 
-    public String getDeporte() {
+    public Deporte getDeporte() {
         return deporte;
     }
 
-    public void setDeporte(String deporte) {
+    public void setDeporte(Deporte deporte) {
         this.deporte = deporte;
     }
 

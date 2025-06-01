@@ -39,9 +39,8 @@ public class Usuario implements UserDetails {
     @Column(name = "numero_cedula", length = 255, nullable = false)
     private String numeroCedula;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private TipoUsuario tipo;
+    @Column(name = "deporte_favorito", length = 255, nullable = true)
+    private String deporte;
 
     private boolean verificado = false;
 
@@ -87,11 +86,6 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
-    }
-
-    // Enum
-    public enum TipoUsuario {
-        deportista, club, organizador, admin
     }
 
     // Constructores
@@ -163,12 +157,12 @@ public class Usuario implements UserDetails {
         this.numeroCedula = numeroCedula;
     }
 
-    public TipoUsuario getTipo() {
-        return tipo;
+    public String getDeporte() {
+        return deporte;
     }
 
-    public void setTipo(TipoUsuario tipo) {
-        this.tipo = tipo;
+    public void setDeporte(String deporte) {
+        this.deporte = deporte;
     }
 
     public boolean isVerificado() {

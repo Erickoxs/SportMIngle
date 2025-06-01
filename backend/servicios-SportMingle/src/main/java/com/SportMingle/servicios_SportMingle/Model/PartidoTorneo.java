@@ -26,9 +26,6 @@ public class PartidoTorneo {
     @Column(name = "fecha_hora", nullable = false)
     private LocalDateTime fechaHora;
 
-    @Column(name = "ubicacion", length = 255)
-    private String ubicacion;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "estado", nullable = false)
     private EstadoPartido estado = EstadoPartido.PROGRAMADO;
@@ -89,14 +86,6 @@ public class PartidoTorneo {
 
     public void setFechaHora(LocalDateTime fechaHora) {
         this.fechaHora = fechaHora;
-    }
-
-    public String getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(String ubicacion) {
-        this.ubicacion = ubicacion;
     }
 
     public EstadoPartido getEstado() {

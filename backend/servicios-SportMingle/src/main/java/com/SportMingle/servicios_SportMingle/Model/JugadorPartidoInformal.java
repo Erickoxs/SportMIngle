@@ -16,7 +16,7 @@ public class JugadorPartidoInformal {
 
     @ManyToOne
     @JoinColumn(name = "id_jugador", nullable = false)
-    private Deportistas jugador;
+    private Usuario jugador;
 
     @Column(name = "posicion", length = 50)
     private String posicion;
@@ -45,11 +45,11 @@ public class JugadorPartidoInformal {
         this.partidoInformal = partidoInformal;
     }
 
-    public Deportistas getJugador() {
+    public Usuario getJugador() {
         return jugador;
     }
 
-    public void setJugador(Deportistas jugador) {
+    public void setJugador(Usuario jugador) {
         this.jugador = jugador;
     }
 

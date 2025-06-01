@@ -18,7 +18,7 @@ public class MiembroClub {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_deportista", nullable = false)
-    private Deportistas deportista;
+    private Usuario deportista;
 
     public enum Rol {
         miembro, capitan, entrenador
@@ -56,11 +56,11 @@ public class MiembroClub {
         this.club = club;
     }
 
-    public Deportistas getDeportista() {
+    public Usuario getDeportista() {
         return deportista;
     }
 
-    public void setDeportista(Deportistas deportista) {
+    public void setDeportista(Usuario deportista) {
         this.deportista = deportista;
     }
 

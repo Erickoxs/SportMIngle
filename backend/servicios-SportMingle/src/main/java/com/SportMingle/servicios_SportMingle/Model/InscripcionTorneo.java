@@ -22,20 +22,9 @@ public class InscripcionTorneo {
     @Column(name = "fecha_inscripcion", nullable = false)
     private LocalDateTime fechaInscripcion = LocalDateTime.now();
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "estado", nullable = false)
-    private EstadoInscripcion estado = EstadoInscripcion.PENDIENTE;
-
-    @Column(name = "motivo_rechazo")
-    private String motivoRechazo;
-
     @Column(name = "pago_realizado", nullable = false)
     private boolean pagoRealizado = false;
 
-    // Enum para estado
-    public enum EstadoInscripcion {
-        PENDIENTE, ACEPTADA, RECHAZADA, RETIRADA
-    }
 
     // Getters y setters
 
@@ -69,22 +58,6 @@ public class InscripcionTorneo {
 
     public void setFechaInscripcion(LocalDateTime fechaInscripcion) {
         this.fechaInscripcion = fechaInscripcion;
-    }
-
-    public EstadoInscripcion getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoInscripcion estado) {
-        this.estado = estado;
-    }
-
-    public String getMotivoRechazo() {
-        return motivoRechazo;
-    }
-
-    public void setMotivoRechazo(String motivoRechazo) {
-        this.motivoRechazo = motivoRechazo;
     }
 
     public boolean isPagoRealizado() {

@@ -9,10 +9,6 @@ import java.time.LocalDateTime;
 @Table(name = "torneos")
 public class Torneo {
 
-    public enum FormatoTorneo {
-        liga, eliminacion, grupos_eliminacion, otros
-    }
-
     public enum EstadoTorneo {
         inscripciones, en_progreso, finalizado, cancelado
     }
@@ -55,9 +51,6 @@ public class Torneo {
 
     @Column(name = "numero_fases")
     private Integer numeroFases; // máximo 3 fases (puedes validar en lógica de negocio)
-
-    @Column(name = "reglas", columnDefinition = "TEXT")
-    private String reglas;
 
     @Column(name = "premios", columnDefinition = "TEXT")
     private String premios;
@@ -170,14 +163,6 @@ public class Torneo {
 
     public void setNumeroFases(Integer numeroFases) {
         this.numeroFases = numeroFases;
-    }
-
-    public String getReglas() {
-        return reglas;
-    }
-
-    public void setReglas(String reglas) {
-        this.reglas = reglas;
     }
 
     public String getPremios() {

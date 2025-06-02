@@ -39,19 +39,9 @@ public class PartidoInformal {
     @Column(name = "nivel_requerido", nullable = false)
     private NivelRequerido nivelRequerido = NivelRequerido.CUALQUIERA;
 
-    @Column(name = "costo_participacion", precision = 10, scale = 2, nullable = false)
-    private BigDecimal costoParticipacion = BigDecimal.ZERO;
-
     @Column(name = "descripcion", columnDefinition = "TEXT")
     private String descripcion;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "estado", nullable = false)
-    private Estado estado = Estado.PLANIFICADO;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "privacidad", nullable = false)
-    private Privacidad privacidad = Privacidad.PUBLICO;
 
     @Column(name = "fecha_creacion", nullable = false, updatable = false)
     private LocalDateTime fechaCreacion = LocalDateTime.now();
@@ -60,13 +50,6 @@ public class PartidoInformal {
         CUALQUIERA, PRINCIPIANTE, AMATEUR, SEMIPROFESIONAL, AVANZADO
     }
 
-    public enum Estado {
-        PLANIFICADO, CONFIRMADO, COMPLETADO, CANCELADO
-    }
-
-    public enum Privacidad {
-        PUBLICO, SOLO_INVITADOS, PRIVADO
-    }
 
     // Getters y Setters
 
@@ -134,36 +117,12 @@ public class PartidoInformal {
         this.nivelRequerido = nivelRequerido;
     }
 
-    public BigDecimal getCostoParticipacion() {
-        return costoParticipacion;
-    }
-
-    public void setCostoParticipacion(BigDecimal costoParticipacion) {
-        this.costoParticipacion = costoParticipacion;
-    }
-
     public String getDescripcion() {
         return descripcion;
     }
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public Estado getEstado() {
-        return estado;
-    }
-
-    public void setEstado(Estado estado) {
-        this.estado = estado;
-    }
-
-    public Privacidad getPrivacidad() {
-        return privacidad;
-    }
-
-    public void setPrivacidad(Privacidad privacidad) {
-        this.privacidad = privacidad;
     }
 
     public LocalDateTime getFechaCreacion() {

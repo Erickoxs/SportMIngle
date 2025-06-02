@@ -1,0 +1,24 @@
+package com.SportMingle.servicios_SportMingle.Repository;
+
+import com.SportMingle.servicios_SportMingle.Model.PartidoInformal;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface PartidoInformalRepository extends JpaRepository<PartidoInformal, Long> {
+
+
+    List<PartidoInformal> findByOrganizadorIdUsuario(Long idUsuario);
+
+
+
+    List<PartidoInformal> findByDeporteId(Long idDeporte);
+
+
+    List<PartidoInformal> findByNivelRequerido(String nivelRequerido);
+
+    List<PartidoInformal> findByDeporteIdAndNivelRequerido(Long idDeporte, String nivelRequerido);
+    // Puedes agregar más consultas específicas según las necesidades
+}

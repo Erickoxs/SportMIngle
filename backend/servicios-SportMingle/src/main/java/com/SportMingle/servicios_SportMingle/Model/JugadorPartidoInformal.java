@@ -18,9 +18,6 @@ public class JugadorPartidoInformal {
     @JoinColumn(name = "id_jugador", nullable = false)
     private Usuario jugador;
 
-    @Column(name = "posicion", length = 50)
-    private String posicion;
-
     @Column(name = "calificacion_organizador")
     private Integer calificacionOrganizador; // 1-5
 
@@ -51,14 +48,6 @@ public class JugadorPartidoInformal {
 
     public void setJugador(Usuario jugador) {
         this.jugador = jugador;
-    }
-
-    public String getPosicion() {
-        return posicion;
-    }
-
-    public void setPosicion(String posicion) {
-        this.posicion = posicion;
     }
 
     public Integer getCalificacionOrganizador() {

@@ -53,5 +53,9 @@ public class PartidoInformalService {
     public List<PartidoInformal> buscarPorDeporteYNivel(Long idDeporte, String nivelRequerido) {
         return partidoInformalRepository.findByDeporteIdAndNivelRequerido(idDeporte, nivelRequerido);
     }
+
+    public boolean existePorId(Long id) {
+        return partidoInformalRepository.existsById(id);
+    }
 }
 

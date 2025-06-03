@@ -62,4 +62,8 @@ public class TorneoService {
     public List<Torneo> obtenerPorDeporte(Long idDeporte) {
         return torneoRepository.findByDeporteId(idDeporte);
     }
+
+    public boolean existePorId(Long id) {
+        return torneoRepository.existsById(id);
+    }
 }

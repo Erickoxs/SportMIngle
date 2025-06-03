@@ -64,5 +64,9 @@ public class ClubesService {
         return clubGuardado;
     }
 
+    public boolean existePorId(Long id) {
+        return clubesRepository.existsById(id);
+    }
+
 
 }

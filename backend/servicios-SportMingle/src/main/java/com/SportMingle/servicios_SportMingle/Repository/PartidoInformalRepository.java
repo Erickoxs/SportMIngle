@@ -21,4 +21,5 @@ public interface PartidoInformalRepository extends JpaRepository<PartidoInformal
 
     List<PartidoInformal> findByDeporteIdAndNivelRequerido(Long idDeporte, String nivelRequerido);
     // Puedes agregar más consultas específicas según las necesidades
+
 }

@@ -1,6 +1,11 @@
 package com.SportMingle.servicios_SportMingle.Model;
 
+import com.SportMingle.servicios_SportMingle.Config.JsonNodeConverter;
+import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -36,8 +41,10 @@ public class MensajeChat {
     @Column(name = "tipo", nullable = false)
     private Tipo tipo = Tipo.texto;
 
-    @Column(name = "metadata", columnDefinition = "json")
-    private String metadata;
+    @Column(name = "metadata")
+    @Convert(converter = JsonNodeConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
+    private JsonNode metadata;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_mensaje_respuesta")
@@ -108,11 +115,11 @@ public class MensajeChat {
         this.tipo = tipo;
     }
 
-    public String getMetadata() {
+    public JsonNode getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(String metadata) {
+    public void setMetadata(JsonNode metadata) {
         this.metadata = metadata;
     }
 

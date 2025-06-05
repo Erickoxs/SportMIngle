@@ -23,7 +23,7 @@ public class Notificacion {
     private String contenido;
 
     @Column(name = "id_referencia")
-    private Integer idReferencia;
+    private Long idReferencia;
 
     @Column(name = "fecha_notificacion", nullable = false)
     private LocalDateTime fechaNotificacion;
@@ -69,11 +69,11 @@ public class Notificacion {
         this.contenido = contenido;
     }
 
-    public Integer getIdReferencia() {
+    public Long getIdReferencia() {
         return idReferencia;
     }
 
-    public void setIdReferencia(Integer idReferencia) {
+    public void setIdReferencia(Long idReferencia) {
         this.idReferencia = idReferencia;
     }
 

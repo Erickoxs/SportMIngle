@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #009b3a;
+  --color-secondary: #ffdf00; /* amarillo 300 */
+}

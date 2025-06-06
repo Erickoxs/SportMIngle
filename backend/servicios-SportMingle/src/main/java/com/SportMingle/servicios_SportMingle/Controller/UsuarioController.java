@@ -33,7 +33,7 @@ public class UsuarioController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public Usuario crearUsuario(@RequestBody Usuario usuario) {
         return usuarioService.crearUsuario(usuario);
     }

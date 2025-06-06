@@ -20,8 +20,8 @@ public class CorsConfig {
                 registry.addMapping("/**")
                         .allowedOrigins(frontendUrl)
                         .allowedMethods("*")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .allowedHeaders("*");
+
             }
         };
     }

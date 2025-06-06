@@ -1,40 +1,72 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../utils/api";
 
 const LoginForm = () => {
+  const [email, setEmail] = useState("");
+  const [passwordHash, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await api.post("/api/usuarios/login", {
+        email,
+        passwordHash,
+      });
+
+      console.log("Respuesta:", response.data);
+
+      localStorage.setItem("token", response.data.token);
+
+      // Redirigir a /home si el login fue exitoso
+      navigate("/home");
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
+      // Aquí podrías mostrar un mensaje de error
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <form className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-        <h2 className="text-center text-2xl font-bold text-gray-800 mb-6">Iniciar Sesión</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white p-8 rounded-lg shadow-md flex flex-col gap-4 max-w-md w-full mx-auto"
+    >
+      <h2 className="text-center text-green-600 font-semibold text-2xl mb-4">Iniciar Sesión</h2>
 
-        <div className="flex flex-col gap-4">
-          <input
-            type="email"
-            placeholder="Correo electrónico"
-            className="p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-          />
+      <input
+        type="email"
+        placeholder="Correo electrónico"
+        className="p-3 rounded border border-gray-300 text-base"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
 
-          <input
-            type="password"
-            placeholder="Contraseña"
-            className="p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary"
-          />
+      <input
+        type="password"
+        placeholder="Contraseña"
+        className="p-3 rounded border border-gray-300 text-base"
+        value={passwordHash}
+        onChange={(e) => setPassword(e.target.value)}
+        required
+      />
 
-          <button
-            type="submit"
-            className="bg-primary text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
-          >
-            Iniciar Sesión
-          </button>
+      <button
+        type="submit"
+        className="bg-green-600 text-white py-3 rounded hover:bg-green-700 transition-colors"
+      >
+        Iniciar Sesión
+      </button>
 
-          <p className="text-center text-sm text-gray-600 mt-4">
-            ¿No tienes cuenta?{" "}
-            <Link to="/register" className="text-primary font-medium hover:underline">
-              Regístrate
-            </Link>
-          </p>
-        </div>
-      </form>
-    </div>
+      <p className="text-center mt-4 text-gray-600">
+        ¿No tienes cuenta?{" "}
+        <Link to="/register" className="text-green-600 font-bold hover:underline">
+          Regístrate
+        </Link>
+      </p>
+    </form>
   );
 };
 

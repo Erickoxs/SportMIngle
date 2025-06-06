@@ -1,6 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../utils/api"; // importa tu instancia de axios
 
 const RegisterForm = () => {
+  const navigate = useNavigate(); 
+
   const [formData, setFormData] = useState({
     nombre: "",
     fechaNacimiento: "",
@@ -15,9 +19,31 @@ const RegisterForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Registrando usuario:", formData);
+
+    if (formData.password !== formData.confirmarPassword) {
+      alert("Las contraseñas no coinciden");
+      return;
+    }
+
+    try {
+      // Aquí envías el formulario al backend
+      const response = await api.post("/api/usuarios/register", {
+        nombre: formData.nombre,
+        fechaNacimiento: formData.fechaNacimiento,
+        numeroCedula: formData.cedula,
+        email: formData.email,
+        passwordHash: formData.password, // o passwordHash si es lo que espera tu backend
+      });
+
+      console.log("Registro exitoso:", response.data);
+      navigate("/");
+      // Aquí podrías redirigir o limpiar el formulario
+    } catch (error) {
+      console.error("Error en el registro:", error);
+      alert("Error al registrar usuario");
+    }
   };
 
   return (
@@ -35,6 +61,9 @@ const RegisterForm = () => {
         boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
       }}
     >
+      {/* Aquí van los inputs como antes */}
+      {/* ... */}
+
       <input
         type="text"
         name="nombre"

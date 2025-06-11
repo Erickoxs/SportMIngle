@@ -2,6 +2,7 @@ package com.SportMingle.servicios_SportMingle.Model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import org.locationtech.jts.geom.Point;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,14 +24,8 @@ public class PartidoInformal {
     @Column(name = "fecha_hora", nullable = false)
     private LocalDateTime fechaHora;
 
-    @Column(name = "direccion", length = 255)
-    private String direccion;
-
-    @Column(nullable = false)
-    private Double latitud;
-
-    @Column(nullable = false)
-    private Double longitud;
+    @Column(columnDefinition = "geography(Point,4326)", nullable = false)
+    private Point ubicacion;
 
     @Column(name = "max_jugadores")
     private Integer maxJugadores;
@@ -85,20 +80,12 @@ public class PartidoInformal {
         this.fechaHora = fechaHora;
     }
 
-    public Double getLatitud() {
-        return latitud;
+    public Point getUbicacion() {
+        return ubicacion;
     }
 
-    public void setLatitud(Double latitud) {
-        this.latitud = latitud;
-    }
-
-    public Double getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(Double longitud) {
-        this.longitud = longitud;
+    public void setUbicacion(Point ubicacion) {
+        this.ubicacion = ubicacion;
     }
 
     public Integer getMaxJugadores() {

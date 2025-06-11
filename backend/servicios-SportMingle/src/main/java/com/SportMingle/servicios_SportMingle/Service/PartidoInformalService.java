@@ -2,8 +2,12 @@ package com.SportMingle.servicios_SportMingle.Service;
 
 import com.SportMingle.servicios_SportMingle.Model.PartidoInformal;
 import com.SportMingle.servicios_SportMingle.Repository.PartidoInformalRepository;
+import com.SportMingle.servicios_SportMingle.dto.PartidoInformalRequest;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.locationtech.jts.geom.Point;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +21,14 @@ public class PartidoInformalService {
     public PartidoInformalService(PartidoInformalRepository partidoInformalRepository) {
         this.partidoInformalRepository = partidoInformalRepository;
     }
+    @Autowired
+    private GeometryFactory geometryFactory;
+
+    @Autowired
+    private UsuarioServiceImpl usuarioService;
+
+    @Autowired
+    private DeporteService deporteService;
 
     public List<PartidoInformal> getAllPartidos() {
         return partidoInformalRepository.findAll();
@@ -26,7 +38,24 @@ public class PartidoInformalService {
         return partidoInformalRepository.findById(id);
     }
 
-    public PartidoInformal crearPartido(PartidoInformal partido) {
+    public PartidoInformal crearPartidoDesdeRequest(PartidoInformalRequest request) {
+        Point point = geometryFactory.createPoint(new Coordinate(request.getLon(), request.getLat()));
+        point.setSRID(4326);
+
+        PartidoInformal partido = new PartidoInformal();
+        partido.setOrganizador(usuarioService.findById(request.getIdOrganizador()));
+        partido.setDeporte(deporteService.obtenerDeportePorId(request.getIdDeporte()));
+        partido.setFechaHora(request.getFechaHora());
+        partido.setUbicacion(point);
+        partido.setMaxJugadores(request.getMaxJugadores());
+
+        // Enum conversion
+        partido.setNivelRequerido(
+                PartidoInformal.NivelRequerido.valueOf(request.getNivelRequerido().toUpperCase())
+        );
+
+        partido.setDescripcion(request.getDescripcion());
+
         return partidoInformalRepository.save(partido);
     }
 
@@ -52,6 +81,10 @@ public class PartidoInformalService {
 
     public List<PartidoInformal> buscarPorDeporteYNivel(Long idDeporte, String nivelRequerido) {
         return partidoInformalRepository.findByDeporteIdAndNivelRequerido(idDeporte, nivelRequerido);
+    }
+
+    public List<PartidoInformal> buscarCercanos(Point ubicacion, String deporte) {
+        return partidoInformalRepository.findPartidosCercanos(ubicacion, deporte, 10000); // radio 10km
     }
 
     public boolean existePorId(Long id) {

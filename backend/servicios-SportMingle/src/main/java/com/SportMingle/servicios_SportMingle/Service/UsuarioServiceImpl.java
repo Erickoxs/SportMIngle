@@ -3,6 +3,7 @@ package com.SportMingle.servicios_SportMingle.Service;
 import com.SportMingle.servicios_SportMingle.Model.Usuario;
 import com.SportMingle.servicios_SportMingle.Repository.UsuarioRepository;
 import com.SportMingle.servicios_SportMingle.Service.UsuarioService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,5 +26,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         String passwordHashed = passwordEncoder.encode(usuario.getPasswordHash());
         usuario.setPasswordHash(passwordHashed);
         return usuarioRepository.save(usuario);
+    }
+
+    public Usuario findById(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
     }
 }

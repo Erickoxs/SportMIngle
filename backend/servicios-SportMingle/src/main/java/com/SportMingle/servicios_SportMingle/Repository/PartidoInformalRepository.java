@@ -2,7 +2,10 @@ package com.SportMingle.servicios_SportMingle.Repository;
 
 import com.SportMingle.servicios_SportMingle.Model.PartidoInformal;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.locationtech.jts.geom.Point;
 
 import java.util.List;
 
@@ -21,5 +24,14 @@ public interface PartidoInformalRepository extends JpaRepository<PartidoInformal
 
     List<PartidoInformal> findByDeporteIdAndNivelRequerido(Long idDeporte, String nivelRequerido);
     // Puedes agregar más consultas específicas según las necesidades
+
+    @Query(value = """
+    SELECT p.* FROM partidos_informales p
+    JOIN deportes d ON p.id_deporte = d.id
+    WHERE d.nombre = :deporte
+    AND ST_DWithin(p.location, :ubicacion, :distancia)
+""", nativeQuery = true)
+    List<PartidoInformal> findPartidosCercanos(@Param("ubicacion") Point ubicacion, @Param("deporte") String deporte, @Param("distancia") double distancia);
+
 
 }

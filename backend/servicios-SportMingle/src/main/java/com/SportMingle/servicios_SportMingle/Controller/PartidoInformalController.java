@@ -5,6 +5,10 @@ import com.SportMingle.servicios_SportMingle.Service.PartidoInformalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Coordinate;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +16,13 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/partidos-informales")
 public class PartidoInformalController {
+
+    @Autowired
+    private GeometryFactory geometryFactory;
+
+    public Point construirPunto(double lat, double lon) {
+        return geometryFactory.createPoint(new Coordinate(lon, lat));
+    }
 
     private final PartidoInformalService partidoInformalService;
 
@@ -81,5 +92,14 @@ public class PartidoInformalController {
 
         List<PartidoInformal> partidos = partidoInformalService.buscarPorDeporteYNivel(idDeporte, nivelRequerido);
         return ResponseEntity.ok(partidos);
+    }
+    @GetMapping("/api/partidos")
+    public List<PartidoInformal> buscarPartidosCercanos(
+            @RequestParam double lat,
+            @RequestParam double lon,
+            @RequestParam String deporte) {
+
+        Point userLocation = geometryFactory.createPoint(new Coordinate(lon, lat));
+        return partidoInformalService.buscarCercanos(userLocation, deporte);
     }
 }

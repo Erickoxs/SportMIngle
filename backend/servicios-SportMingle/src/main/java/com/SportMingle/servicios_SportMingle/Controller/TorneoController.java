@@ -3,6 +3,7 @@ package com.SportMingle.servicios_SportMingle.Controller;
 
 import com.SportMingle.servicios_SportMingle.Model.Torneo;
 import com.SportMingle.servicios_SportMingle.Service.TorneoService;
+import com.SportMingle.servicios_SportMingle.dto.TorneoRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +34,13 @@ public class TorneoController {
     }
 
     @PostMapping
-    public ResponseEntity<Torneo> crearTorneo(@RequestBody Torneo torneo) {
-        return ResponseEntity.ok(torneoService.crearTorneo(torneo));
+    public ResponseEntity<Torneo> crearTorneo(@RequestBody TorneoRequest request) {
+        try {
+            Torneo nuevoTorneo = torneoService.crearTorneoDesdeRequest(request);
+            return ResponseEntity.ok(nuevoTorneo);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build(); // Podés mejorar esto con mensajes más específicos si querés
+        }
     }
 
     @PutMapping("/{id}")

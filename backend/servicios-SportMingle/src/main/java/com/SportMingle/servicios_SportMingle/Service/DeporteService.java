@@ -2,6 +2,7 @@ package com.SportMingle.servicios_SportMingle.Service;
 
 import com.SportMingle.servicios_SportMingle.Model.Deporte;
 import com.SportMingle.servicios_SportMingle.Repository.DeporteRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,9 @@ public class DeporteService {
     }
 
     // Buscar por ID
-    public Optional<Deporte> obtenerDeportePorId(Long id) {
-        return deporteRepository.findById(id);
+    public Deporte obtenerDeportePorId(Long id) {
+        return deporteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Deporte con ID " + id + " no encontrado"));
     }
+
 }

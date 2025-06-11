@@ -1,6 +1,8 @@
 package com.SportMingle.servicios_SportMingle.Model;
 
 import jakarta.persistence.*;
+import org.locationtech.jts.geom.Point;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,14 +42,10 @@ public class Torneo {
     @Column(name = "fecha_fin", nullable = false)
     private LocalDate fechaFin;
 
-    @Column(name = "direccion", length = 255)
-    private String direccion;
 
-    @Column(nullable = false)
-    private Double latitud;
+    @Column(columnDefinition = "geography(Point,4326)", nullable = false)
+    private Point ubicacion;
 
-    @Column(nullable = false)
-    private Double longitud;
 
     @Column(name = "numero_fases")
     private Integer numeroFases; // máximo 3 fases (puedes validar en lógica de negocio)
@@ -133,30 +131,6 @@ public class Torneo {
         this.fechaFin = fechaFin;
     }
 
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public Double getLatitud() {
-        return latitud;
-    }
-
-    public void setLatitud(Double latitud) {
-        this.latitud = latitud;
-    }
-
-    public Double getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(Double longitud) {
-        this.longitud = longitud;
-    }
-
     public Integer getNumeroFases() {
         return numeroFases;
     }
@@ -207,6 +181,14 @@ public class Torneo {
 
     public LocalDateTime getFechaCreacion() {
         return fechaCreacion;
+    }
+
+    public Point getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(Point ubicacion) {
+        this.ubicacion = ubicacion;
     }
 
     public void setFechaCreacion(LocalDateTime fechaCreacion) {

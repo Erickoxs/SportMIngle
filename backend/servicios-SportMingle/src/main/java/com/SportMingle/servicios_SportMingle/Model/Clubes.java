@@ -1,6 +1,8 @@
 package com.SportMingle.servicios_SportMingle.Model;
 
 import jakarta.persistence.*;
+import org.locationtech.jts.geom.Point;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Entity
@@ -32,14 +34,9 @@ public class Clubes {
     @JoinColumn(name = "id_deporte", nullable = false)
     private Deporte deporte;
 
-    @Column(name = "direccion", length = 255)
-    private String direccion;
+    @Column(columnDefinition = "geography(Point,4326)", nullable = false)
+    private Point ubicacion;
 
-    @Column(nullable = false)
-    private Double latitud;
-
-    @Column(nullable = false)
-    private Double longitud;
 
 
     public Clubes() {
@@ -95,31 +92,17 @@ public class Clubes {
         return deporte;
     }
 
+    public Point getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(Point ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
     public void setDeporte(Deporte deporte) {
         this.deporte = deporte;
     }
 
-    public String getDireccion() {
-        return direccion;
-    }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public Double getLatitud() {
-        return latitud;
-    }
-
-    public void setLatitud(Double latitud) {
-        this.latitud = latitud;
-    }
-
-    public Double getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(Double longitud) {
-        this.longitud = longitud;
-    }
 }

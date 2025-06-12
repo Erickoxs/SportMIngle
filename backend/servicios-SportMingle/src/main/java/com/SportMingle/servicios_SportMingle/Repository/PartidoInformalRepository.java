@@ -27,11 +27,15 @@ public interface PartidoInformalRepository extends JpaRepository<PartidoInformal
 
     @Query(value = """
     SELECT p.* FROM partidos_informales p
-    JOIN deportes d ON p.id_deporte = d.id
-    WHERE d.nombre = :deporte
-    AND ST_DWithin(p.location, :ubicacion, :distancia)
+    JOIN deportes d ON p.id_deporte = d.id_deporte
+    WHERE d.nombre = :nombreDeporte
+    AND ST_DWithin(p.ubicacion, :ubicacion, :distancia)
 """, nativeQuery = true)
-    List<PartidoInformal> findPartidosCercanos(@Param("ubicacion") Point ubicacion, @Param("deporte") String deporte, @Param("distancia") double distancia);
+    List<PartidoInformal> buscarCercanos(
+            @Param("ubicacion") Point ubicacion,
+            @Param("nombreDeporte") String nombreDeporte,
+            @Param("distancia") double distancia
+    );
 
 
 }

@@ -4,6 +4,7 @@ package com.SportMingle.servicios_SportMingle.Controller;
 import com.SportMingle.servicios_SportMingle.Model.Torneo;
 import com.SportMingle.servicios_SportMingle.Service.TorneoService;
 import com.SportMingle.servicios_SportMingle.dto.TorneoRequest;
+import com.SportMingle.servicios_SportMingle.dto.TorneoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,29 @@ public class TorneoController {
         return torneoService.obtenerTodos();
     }
 
+    @GetMapping("/cercanos")
+    public ResponseEntity<List<TorneoResponse>> buscarTorneosCercanos(
+            @RequestParam double lat,
+            @RequestParam double lon,
+            @RequestParam double distancia,
+            @RequestParam String deporte
+    ) {
+        List<Torneo> torneos = torneoService.buscarTorneosCercanos(lat, lon, distancia, deporte);
+        List<TorneoResponse> respuesta = torneos.stream()
+                .map(TorneoResponse::new)
+                .toList();
+        return ResponseEntity.ok(respuesta);
+    }
+
+    @GetMapping("/estado/{estado}")
+    public List<Torneo> obtenerPorEstado(@PathVariable Torneo.EstadoTorneo estado) {
+        return torneoService.obtenerPorEstado(estado);
+    }
+
+    @GetMapping("/deporte/{idDeporte}")
+    public List<Torneo> obtenerPorDeporte(@PathVariable Long idDeporte) {
+        return torneoService.obtenerPorDeporte(idDeporte);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<Torneo> obtenerTorneoPorId(@PathVariable Long id) {
         return torneoService.obtenerPorId(id)
@@ -39,7 +63,7 @@ public class TorneoController {
             Torneo nuevoTorneo = torneoService.crearTorneoDesdeRequest(request);
             return ResponseEntity.ok(nuevoTorneo);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build(); // Podés mejorar esto con mensajes más específicos si querés
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -59,13 +83,8 @@ public class TorneoController {
     }
 
 
-    @GetMapping("/estado/{estado}")
-    public List<Torneo> obtenerPorEstado(@PathVariable Torneo.EstadoTorneo estado) {
-        return torneoService.obtenerPorEstado(estado);
-    }
 
-    @GetMapping("/deporte/{idDeporte}")
-    public List<Torneo> obtenerPorDeporte(@PathVariable Long idDeporte) {
-        return torneoService.obtenerPorDeporte(idDeporte);
-    }
+
+
+
 }

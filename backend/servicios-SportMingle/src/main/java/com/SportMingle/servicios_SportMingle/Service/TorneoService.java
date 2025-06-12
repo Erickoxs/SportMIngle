@@ -1,5 +1,6 @@
 package com.SportMingle.servicios_SportMingle.Service;
 
+import com.SportMingle.servicios_SportMingle.Model.Deporte;
 import com.SportMingle.servicios_SportMingle.Model.Torneo;
 import com.SportMingle.servicios_SportMingle.Repository.TorneoRepository;
 import com.SportMingle.servicios_SportMingle.dto.TorneoRequest;
@@ -48,7 +49,12 @@ public class TorneoService {
         torneo.setDescripcion(request.getDescripcion());
 
         torneo.setOrganizador(usuarioService.findById(request.getIdOrganizador()));
-        torneo.setDeporte(deporteService.obtenerDeportePorId(request.getIdDeporte()));
+
+        Deporte deporte = deporteService.obtenerDeportePorId(request.getIdDeporte());
+
+        torneo.setDeporte(deporte);
+
+
 
         torneo.setFechaInicio(request.getFechaInicio());
         torneo.setFechaFin(request.getFechaFin());
@@ -105,4 +111,10 @@ public class TorneoService {
     public boolean existePorId(Long id) {
         return torneoRepository.existsById(id);
     }
+
+    public List<Torneo> buscarTorneosCercanos(double lat, double lon, double distancia, String deporte) {
+        return torneoRepository.findTorneosCercanosPorDeporte(lat, lon, distancia, deporte);
+    }
+
+
 }

@@ -2,6 +2,8 @@ package com.SportMingle.servicios_SportMingle.Controller;
 
 import com.SportMingle.servicios_SportMingle.Model.PartidoInformal;
 import com.SportMingle.servicios_SportMingle.Service.PartidoInformalService;
+import com.SportMingle.servicios_SportMingle.dto.PartidoInformalRequest;
+import com.SportMingle.servicios_SportMingle.dto.PartidoInformalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +39,21 @@ public class PartidoInformalController {
         List<PartidoInformal> partidos = partidoInformalService.getAllPartidos();
         return ResponseEntity.ok(partidos);
     }
+    @GetMapping("/cercanos")
+    public ResponseEntity<List<PartidoInformalResponse>> buscarPartidosCercanos(
+            @RequestParam double lat,
+            @RequestParam double lon,
+            @RequestParam String deporte,
+            @RequestParam(defaultValue = "10000") double distancia // opcional: 10km por defecto
+    ) {
+        List<PartidoInformal> partidos = partidoInformalService.buscarCercanos(lat, lon, deporte, distancia);
+        List<PartidoInformalResponse> respuesta = partidos.stream()
+                .map(PartidoInformalResponse::new)
+                .toList();
+        return ResponseEntity.ok(respuesta);
+    }
+
+
 
     // Obtener partido informal por ID
     @GetMapping("/{id}")
@@ -48,8 +65,8 @@ public class PartidoInformalController {
 
     // Crear un nuevo partido informal
     @PostMapping
-    public ResponseEntity<PartidoInformal> crearPartido(@RequestBody PartidoInformal partido) {
-        PartidoInformal creado = partidoInformalService.crearPartido(partido);
+    public ResponseEntity<PartidoInformal> crearPartido(@RequestBody PartidoInformalRequest partido) {
+        PartidoInformal creado = partidoInformalService.crearPartidoDesdeRequest(partido);
         return ResponseEntity.ok(creado);
     }
 
@@ -93,13 +110,5 @@ public class PartidoInformalController {
         List<PartidoInformal> partidos = partidoInformalService.buscarPorDeporteYNivel(idDeporte, nivelRequerido);
         return ResponseEntity.ok(partidos);
     }
-    @GetMapping("/api/partidos")
-    public List<PartidoInformal> buscarPartidosCercanos(
-            @RequestParam double lat,
-            @RequestParam double lon,
-            @RequestParam String deporte) {
 
-        Point userLocation = geometryFactory.createPoint(new Coordinate(lon, lat));
-        return partidoInformalService.buscarCercanos(userLocation, deporte);
-    }
 }

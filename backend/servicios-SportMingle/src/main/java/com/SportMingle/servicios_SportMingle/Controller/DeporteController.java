@@ -2,6 +2,7 @@ package com.SportMingle.servicios_SportMingle.Controller;
 
 import com.SportMingle.servicios_SportMingle.Model.Deporte;
 import com.SportMingle.servicios_SportMingle.Service.DeporteService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +31,14 @@ public class DeporteController {
     // GET /api/deportes/{id}
     @GetMapping("/{id}")
     public ResponseEntity<Deporte> obtenerDeportePorId(@PathVariable Long id) {
-        Optional<Deporte> deporte = deporteService.obtenerDeportePorId(id);
-        return deporte.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        try {
+            Deporte deporte = deporteService.obtenerDeportePorId(id);
+            return ResponseEntity.ok(deporte);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 
     // POST /api/deportes
     @PostMapping

@@ -83,8 +83,10 @@ public class PartidoInformalService {
         return partidoInformalRepository.findByDeporteIdAndNivelRequerido(idDeporte, nivelRequerido);
     }
 
-    public List<PartidoInformal> buscarCercanos(Point ubicacion, String deporte) {
-        return partidoInformalRepository.findPartidosCercanos(ubicacion, deporte, 10000); // radio 10km
+    public List<PartidoInformal> buscarCercanos(double lat, double lon, String deporte, double distancia) {
+        Point ubicacion = geometryFactory.createPoint(new Coordinate(lon, lat)); // lon, lat (orden importante)
+        ubicacion.setSRID(4326);
+        return partidoInformalRepository.buscarCercanos(ubicacion, deporte, distancia);
     }
 
     public boolean existePorId(Long id) {

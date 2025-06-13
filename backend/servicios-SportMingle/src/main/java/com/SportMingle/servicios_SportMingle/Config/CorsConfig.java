@@ -9,11 +9,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CorsConfig {
 
+
+
+
     @Value("${frontend.url}")
     private String frontendUrl;
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
+        System.out.println("CORS configurado para: " + frontendUrl);
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {

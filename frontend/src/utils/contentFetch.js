@@ -1,0 +1,31 @@
+import axios from 'axios';
+
+export async function obtenerContenidoPorCategoriaYDeporte(categoria, deporte, lat, lon) {
+  const token = localStorage.getItem('token');
+  console.log("Token enviado:", token);
+
+  const url = `http://localhost:8080/api/${categoria}/cercanos`;
+
+  try {
+    const response = await axios({
+      method: 'get',
+      url: url,
+      params: {
+        lat,
+        lon,
+        deporte,
+        distancia: 20000
+      },
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    return response.data;
+
+  } catch (error) {
+    console.error('Error al obtener el contenido:', error.response || error);
+    return [];
+  }
+}

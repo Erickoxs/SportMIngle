@@ -9,6 +9,7 @@ public class ClubResponse {
     private String descripcion;
     private double lat;
     private double lon;
+    private String logoUrl;
     private String deporte;
 
     public ClubResponse(Clubes club) {
@@ -18,6 +19,7 @@ public class ClubResponse {
         this.lat = club.getUbicacion().getY(); // latitud
         this.lon = club.getUbicacion().getX(); // longitud
         this.deporte = club.getDeporte().getNombre();
+        this.logoUrl = club.getLogoUrl();
     }
 
     // Getters
@@ -44,5 +46,9 @@ public class ClubResponse {
 
     public String getDeporte() {
         return deporte;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
     }
 }

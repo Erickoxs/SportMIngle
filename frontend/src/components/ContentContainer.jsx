@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { obtenerContenidoPorCategoriaYDeporte } from '../utils/contentFetch';
-import { obtenerDireccion } from '../utils/geoLocationUtil'; // Asegúrate de tener esto
+import { obtenerDireccion } from '../utils/geoLocationUtil';
+import TarjetaCategoria from './TarjetaCategoria'; // Asegúrate de que esté en la ruta correcta
 
 function ContentContainer({ deporte, categoria }) {
   const [ubicacion, setUbicacion] = useState(null);
@@ -62,14 +63,9 @@ function ContentContainer({ deporte, categoria }) {
   if (loading) return <p className="text-center text-gray-500">Cargando contenido...</p>;
 
   return (
-    <div ref={scrollRef} className="h-[400px] overflow-y-auto space-y-3 pr-2">
+    <div ref={scrollRef} className="h-[400px] overflow-y-auto space-y-4 pr-2">
       {contenido.map((item, i) => (
-        <div key={i} className="p-4 bg-white rounded shadow">
-          <h2 className="font-bold text-lg">{item.nombre}</h2>
-          <p className="text-sm text-gray-600 mb-1">{item.descripcion}</p>
-          {item.direccion && <p className="text-sm text-gray-500">📍 {item.direccion}</p>}
-          <p className="text-xs text-gray-400 italic">Deporte: {item.deporte}</p>
-        </div>
+        <TarjetaCategoria key={i} categoria={categoria} item={item} />
       ))}
     </div>
   );

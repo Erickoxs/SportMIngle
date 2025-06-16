@@ -11,6 +11,7 @@ public class PartidoInformalResponse {
     private LocalDateTime fechaHora;
     private double lat;
     private double lon;
+    private PartidoInformal.NivelRequerido nivelRequerido;
     private String deporte;
 
     public PartidoInformalResponse(PartidoInformal partido) {
@@ -18,7 +19,8 @@ public class PartidoInformalResponse {
         this.descripcion = partido.getDescripcion();
         this.fechaHora = partido.getFechaHora();
         this.lat = partido.getUbicacion().getY(); // latitud
-        this.lon = partido.getUbicacion().getX(); // longitud
+        this.lon = partido.getUbicacion().getX();
+        this.nivelRequerido = partido.getNivelRequerido();// longitud
         this.deporte = partido.getDeporte().getNombre();
     }
 
@@ -46,5 +48,9 @@ public class PartidoInformalResponse {
 
     public String getDeporte() {
         return deporte;
+    }
+
+    public PartidoInformal.NivelRequerido getNivelRequerido() {
+        return nivelRequerido;
     }
 }

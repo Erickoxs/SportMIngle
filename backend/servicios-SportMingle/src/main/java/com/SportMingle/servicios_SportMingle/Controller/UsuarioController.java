@@ -1,6 +1,7 @@
 package com.SportMingle.servicios_SportMingle.Controller;
 
 import com.SportMingle.servicios_SportMingle.Model.Usuario;
+import com.SportMingle.servicios_SportMingle.Repository.UsuarioRepository;
 import com.SportMingle.servicios_SportMingle.Security.JwtUtil;
 import com.SportMingle.servicios_SportMingle.Service.UsuarioService;
 import com.SportMingle.servicios_SportMingle.dto.LoginRequest;
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -23,6 +25,9 @@ public class UsuarioController {
     private final JwtUtil jwtUtil;
     private final UsuarioService usuarioService;
     private final AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
 
 
@@ -49,7 +54,12 @@ public class UsuarioController {
                     )
             );
 
-            String token = jwtUtil.generarToken(loginRequest.getEmail());
+            // Buscar el usuario por email
+            Usuario usuario = usuarioRepository.findByEmail(loginRequest.getEmail())
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+
+            // Generar token con ID incluido
+            String token = jwtUtil.generarToken(usuario);
 
             return ResponseEntity.ok().body(Map.of("token", token));
 
@@ -57,5 +67,4 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "Email o contraseña incorrectos"));
         }
-    }
-}
+}}

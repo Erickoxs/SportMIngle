@@ -1,5 +1,6 @@
 package com.SportMingle.servicios_SportMingle.Security;
 
+import com.SportMingle.servicios_SportMingle.Model.Usuario;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -18,15 +19,18 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generarToken(String email) {
+    public String generarToken(Usuario usuario) {
         long expirationTime = 1000 * 60 * 60 * 10; // 10 horas
+
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(usuario.getEmail())
+                .claim("id", usuario.getIdUsuario()) // <-- Aquí agregas el ID al token
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
+
 
     public String extraerEmail(String token) {
         return Jwts.parserBuilder()

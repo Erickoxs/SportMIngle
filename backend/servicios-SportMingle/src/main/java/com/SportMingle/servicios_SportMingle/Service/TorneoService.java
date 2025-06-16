@@ -10,6 +10,8 @@ import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,40 +42,49 @@ public class TorneoService {
         return torneoRepository.findById(id);
     }
 
-    public Torneo crearTorneoDesdeRequest(TorneoRequest request) {
-        Point point = geometryFactory.createPoint(new Coordinate(request.getLon(), request.getLat()));
+    public Torneo crearTorneo(
+            String nombre,
+            String descripcion,
+            Long idDeporte,
+            Long idOrganizador,
+            LocalDate fechaInicio,
+            LocalDate fechaFin,
+            double lat,
+            double lon,
+            Integer numeroFases,
+            String premios,
+            BigDecimal costoInscripcion,
+            Integer maxEquipos,
+            String estado,
+            String imagenTorneo // Este es un String (URL), si luego quieres guardar archivos reales, esto cambia
+    ) {
+        Point point = geometryFactory.createPoint(new Coordinate(lon, lat));
         point.setSRID(4326);
 
         Torneo torneo = new Torneo();
-        torneo.setNombre(request.getNombre());
-        torneo.setDescripcion(request.getDescripcion());
+        torneo.setNombre(nombre);
+        torneo.setDescripcion(descripcion);
 
-        torneo.setOrganizador(usuarioService.findById(request.getIdOrganizador()));
+        torneo.setOrganizador(usuarioService.findById(idOrganizador));
+        torneo.setDeporte(deporteService.obtenerDeportePorId(idDeporte));
 
-        Deporte deporte = deporteService.obtenerDeportePorId(request.getIdDeporte());
-
-        torneo.setDeporte(deporte);
-
-
-
-        torneo.setFechaInicio(request.getFechaInicio());
-        torneo.setFechaFin(request.getFechaFin());
+        torneo.setFechaInicio(fechaInicio);
+        torneo.setFechaFin(fechaFin);
         torneo.setUbicacion(point);
+        torneo.setNumeroFases(numeroFases);
+        torneo.setPremios(premios);
+        torneo.setCostoInscripcion(costoInscripcion);
+        torneo.setMaxEquipos(maxEquipos);
 
-        torneo.setNumeroFases(request.getNumeroFases());
-        torneo.setPremios(request.getPremios());
-        torneo.setCostoInscripcion(request.getCostoInscripcion());
-        torneo.setMaxEquipos(request.getMaxEquipos());
-
-        if (request.getEstado() != null) {
-            torneo.setEstado(Torneo.EstadoTorneo.valueOf(request.getEstado().toLowerCase()));
+        if (estado != null) {
+            torneo.setEstado(Torneo.EstadoTorneo.valueOf(estado.toLowerCase()));
         }
 
-        torneo.setImagenTorneo(request.getImagenTorneo());
-
+        torneo.setImagenTorneo(imagenTorneo);
 
         return torneoRepository.save(torneo);
     }
+
 
 
 

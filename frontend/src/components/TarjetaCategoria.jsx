@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // Importa imágenes aleatorias para partidos informales
 import img1 from '../assets/informal1.jfif';
@@ -10,24 +11,18 @@ import img5 from '../assets/informal5.jpg';
 const imagenesInformales = [img1, img2, img3, img4, img5];
 
 function TarjetaCategoria({ categoria, item }) {
+  const navigate = useNavigate();
   const imagenAleatoria = imagenesInformales[Math.floor(Math.random() * imagenesInformales.length)];
 
-  // Depuración para torneos
-  if (categoria === 'torneos') {
-    console.log('🔍 Tarjeta de Torneo:', item);
-  }
-
-  // Depuración para clubes
-  if (categoria === 'clubes') {
-    console.log('🔍 Tarjeta de Club:', item);
-  }
-
-   if (categoria === 'partidos-informales') {
-    console.log('🔍 Tarjeta de partido:', item);
-  }
+  const handleClick = () => {
+    navigate(`/details/${item.id}`);
+  };
 
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden p-4 space-y-2">
+    <div
+      className="bg-white shadow-md rounded-lg overflow-hidden p-4 space-y-2 cursor-pointer hover:shadow-lg transition"
+      onClick={handleClick}
+    >
       {categoria === 'partidos-informales' && (
         <>
           <img
@@ -43,8 +38,14 @@ function TarjetaCategoria({ categoria, item }) {
 
       {categoria === 'torneos' && (
         <>
+          {console.log('🔗 URL imagen torneo:', item.imagenTorneo)}
+
           <img
-            src={item.imagenTorneo || '/placeholder-torneo.jpg'}
+            src={
+              item.imagenTorneo
+                ? `http://localhost:8080/${item.imagenTorneo.replace(/\\/g, '/')}`
+                : '/placeholder-torneo.jpg'
+            }
             alt="Torneo"
             className="w-full h-48 object-cover rounded"
           />
@@ -56,8 +57,14 @@ function TarjetaCategoria({ categoria, item }) {
 
       {categoria === 'clubes' && (
         <>
+          {console.log('🔗 URL logo club:', item.logoUrl)}
+
           <img
-            src={item.logoUrl || '/placeholder-club.jpg'}
+            src={
+              item.logoUrl
+                ? `http://localhost:8080/${item.logoUrl.replace(/\\/g, '/')}`
+                : '/placeholder-club.jpg'
+            }
             alt="Logo del Club"
             className="w-full h-48 object-contain bg-gray-100 rounded"
           />

@@ -65,8 +65,9 @@ return (
         idItem={item.id || item.idPartidoInformal || item.idClub || item.idTorneo}
         deporteTorneo={item.deporte}
       />
-      <ListaInscripciones categoria={categoria} id={id} />
+      
     </div>
+    <ListaInscripciones categoria={categoria} id={id} />
   </div>
 );
 }

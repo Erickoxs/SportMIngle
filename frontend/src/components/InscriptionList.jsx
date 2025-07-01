@@ -73,17 +73,17 @@ const ListaInscripciones = ({ categoria, id }) => {
           >
             {categoria === 'torneos' && (
               <>
-                <strong>Club:</strong> {inscripcion.clubes?.nombre || 'Desconocido'}
+                <strong>Club:</strong> {inscripcion.nombreClub || 'Desconocido'}
               </>
             )}
             {categoria === 'partidos-informales' && (
               <>
-                <strong>Jugador:</strong> {inscripcion.jugador?.nombre || 'Desconocido'}
+                <strong>Jugador:</strong> {inscripcion.nombreJugador || 'Desconocido'}
               </>
             )}
             {categoria === 'clubes' && (
               <>
-                <strong>Miembro:</strong> {inscripcion.deportista?.nombre || 'Desconocido'}<br />
+                <strong>Miembro:</strong> {inscripcion.nombreDeportista|| 'Desconocido'}<br />
                 <strong>Rol:</strong> {inscripcion.rol}
               </>
             )}

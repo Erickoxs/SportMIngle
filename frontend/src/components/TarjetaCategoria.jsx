@@ -15,7 +15,7 @@ function TarjetaCategoria({ categoria, item }) {
   const imagenAleatoria = imagenesInformales[Math.floor(Math.random() * imagenesInformales.length)];
 
   const handleClick = () => {
-    navigate(`/details/${item.id}`);
+    navigate(`/details/${categoria}/${item.id}`);
   };
 
   return (
@@ -69,7 +69,7 @@ function TarjetaCategoria({ categoria, item }) {
             className="w-full h-48 object-contain bg-gray-100 rounded"
           />
           <h3 className="text-lg font-semibold text-gray-800">{item.nombre}</h3>
-          <p className="text-sm text-gray-600">Direccion: {item.direccion}</p>
+          <p className="text-sm text-gray-600">Dirección: {item.direccion}</p>
         </>
       )}
     </div>

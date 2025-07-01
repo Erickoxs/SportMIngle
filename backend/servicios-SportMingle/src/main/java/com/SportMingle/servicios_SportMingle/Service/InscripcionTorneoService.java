@@ -2,6 +2,8 @@ package com.SportMingle.servicios_SportMingle.Service;
 
 import com.SportMingle.servicios_SportMingle.Model.InscripcionTorneo;
 import com.SportMingle.servicios_SportMingle.Repository.InscripcionTorneoRepository;
+import com.SportMingle.servicios_SportMingle.dto.InscripcionTorneoResponse;
+import com.SportMingle.servicios_SportMingle.dto.TorneoResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,14 @@ public class InscripcionTorneoService {
 
     public List<InscripcionTorneo> obtenerPorClub(Long idClub) {
         return inscripcionTorneoRepository.findByClubesId(idClub);
+    }
+
+    public List<InscripcionTorneoResponse> obtenerInscripcionesPorTorneo(Long idTorneo) {
+        List<InscripcionTorneo> inscripciones = inscripcionTorneoRepository.findByTorneoId(idTorneo);
+
+        return inscripciones.stream()
+                .map(InscripcionTorneoResponse::new)
+                .toList();
     }
 
     public InscripcionTorneo guardarInscripcion(InscripcionTorneo inscripcion) {

@@ -57,10 +57,17 @@ public class PartidoInformalController {
 
     // Obtener partido informal por ID
     @GetMapping("/{id}")
-    public ResponseEntity<PartidoInformal> getPartidoById(@PathVariable Long id) {
-        Optional<PartidoInformal> partido = partidoInformalService.getPartidoById(id);
-        return partido.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<PartidoInformalResponse> getPartidoById(@PathVariable Long id) {
+        Optional<PartidoInformal> partidoOpt = partidoInformalService.getPartidoById(id);
+
+        if (partidoOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        PartidoInformal partido = partidoOpt.get();
+        PartidoInformalResponse response = new PartidoInformalResponse(partido);
+
+        return ResponseEntity.ok(response);
     }
 
     // Crear un nuevo partido informal

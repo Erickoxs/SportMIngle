@@ -6,6 +6,7 @@ import com.SportMingle.servicios_SportMingle.Model.Clubes;
 import com.SportMingle.servicios_SportMingle.Repository.MiembroRepository;
 import com.SportMingle.servicios_SportMingle.Repository.UsuarioRepository;
 import com.SportMingle.servicios_SportMingle.Repository.ClubesRepository;
+import com.SportMingle.servicios_SportMingle.dto.MiembroClubResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +36,13 @@ public class MiembroClubService {
 
     public boolean esMiembroActivo(Long idUsuario, Long idClub) {
         return miembroRepository.existsByDeportistaIdUsuarioAndClubIdAndActivoTrue(idUsuario, idClub);
+    }
+
+    public List<MiembroClubResponse> obtenerMiembrosPorClub(Long idClub) {
+        List<MiembroClub> miembros = miembroRepository.findByClubId(idClub);
+        return miembros.stream()
+                .map(MiembroClubResponse::new)
+                .toList();
     }
 
     public MiembroClub guardarMiembro(MiembroClub miembroClub) {

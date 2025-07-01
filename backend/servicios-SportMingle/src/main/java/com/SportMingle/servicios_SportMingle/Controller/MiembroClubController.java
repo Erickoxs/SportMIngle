@@ -2,6 +2,7 @@ package com.SportMingle.servicios_SportMingle.Controller;
 
 import com.SportMingle.servicios_SportMingle.Model.MiembroClub;
 import com.SportMingle.servicios_SportMingle.Service.MiembroClubService;
+import com.SportMingle.servicios_SportMingle.dto.MiembroClubResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +20,11 @@ public class MiembroClubController {
 
     // Obtener miembros por ID de club
     @GetMapping("/club/{idClub}")
-    public ResponseEntity<List<MiembroClub>> obtenerPorClub(@PathVariable Long idClub) {
-        return ResponseEntity.ok(miembroClubService.obtenerPorClub(idClub));
+    public ResponseEntity<List<MiembroClubResponse>> obtenerPorClub(@PathVariable Long idClub) {
+        List<MiembroClubResponse> response = miembroClubService.obtenerMiembrosPorClub(idClub);
+        return ResponseEntity.ok(response);
     }
+
 
     // Obtener miembros por ID de usuario
     @GetMapping("/usuario/{idUsuario}")

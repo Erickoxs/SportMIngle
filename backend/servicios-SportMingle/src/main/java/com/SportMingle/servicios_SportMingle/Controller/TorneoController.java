@@ -61,12 +61,11 @@ public class TorneoController {
         return torneoService.obtenerPorDeporte(idDeporte);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Torneo> obtenerTorneoPorId(@PathVariable Long id) {
+    public ResponseEntity<TorneoResponse> obtenerTorneoPorId(@PathVariable Long id) {
         return torneoService.obtenerPorId(id)
-                .map(ResponseEntity::ok)
+                .map(torneo -> ResponseEntity.ok(new TorneoResponse(torneo)))
                 .orElse(ResponseEntity.notFound().build());
     }
-
     @PostMapping
     public ResponseEntity<Torneo> crearTorneo(
             @RequestParam String nombre,

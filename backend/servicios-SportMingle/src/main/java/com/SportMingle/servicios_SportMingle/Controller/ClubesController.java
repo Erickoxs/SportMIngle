@@ -114,5 +114,24 @@ public class ClubesController {
         return ResponseEntity.ok(respuesta);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ClubResponse> obtenerClubPorId(@PathVariable Long id) {
+        return clubesService.obtenerPorId(id)
+                .map(club -> ResponseEntity.ok(new ClubResponse(club)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/organizador/{idOrganizador}")
+    public ResponseEntity<ClubResponse> obtenerClubPorOrganizador(@PathVariable Long idOrganizador) {
+        try {
+            Clubes club = clubesService.obtenerClubPorOrganizador(idOrganizador);
+            return ResponseEntity.ok(new ClubResponse(club));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+
+
 
 }

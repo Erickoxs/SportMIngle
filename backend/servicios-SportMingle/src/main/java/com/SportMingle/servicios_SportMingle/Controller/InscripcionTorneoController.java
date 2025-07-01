@@ -1,7 +1,10 @@
 package com.SportMingle.servicios_SportMingle.Controller;
 
 import com.SportMingle.servicios_SportMingle.Model.InscripcionTorneo;
+import com.SportMingle.servicios_SportMingle.Repository.InscripcionTorneoRepository;
 import com.SportMingle.servicios_SportMingle.Service.InscripcionTorneoService;
+import com.SportMingle.servicios_SportMingle.dto.InscripcionTorneoResponse;
+import com.SportMingle.servicios_SportMingle.dto.TorneoResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +22,11 @@ public class InscripcionTorneoController {
 
     // Obtener inscripciones por torneo
     @GetMapping("/torneo/{idTorneo}")
-    public ResponseEntity<List<InscripcionTorneo>> obtenerPorTorneo(@PathVariable Long idTorneo) {
-        List<InscripcionTorneo> inscripciones = inscripcionTorneoService.obtenerPorTorneo(idTorneo);
-        return ResponseEntity.ok(inscripciones);
+    public ResponseEntity<List<InscripcionTorneoResponse>> obtenerInscripcionesPorTorneo(@PathVariable Long idTorneo) {
+        List<InscripcionTorneoResponse> response = inscripcionTorneoService.obtenerInscripcionesPorTorneo(idTorneo);
+        return ResponseEntity.ok(response);
     }
+
 
     // Obtener inscripciones por club
     @GetMapping("/club/{idClub}")

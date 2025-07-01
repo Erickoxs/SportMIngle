@@ -3,6 +3,7 @@ import com.SportMingle.servicios_SportMingle.Model.JugadorPartidoInformal;
 import com.SportMingle.servicios_SportMingle.Model.PartidoInformal;
 import com.SportMingle.servicios_SportMingle.Model.Usuario;
 import com.SportMingle.servicios_SportMingle.Repository.JugadorPartidoInformalRepository;
+import com.SportMingle.servicios_SportMingle.dto.JugadorPartidoInformalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +28,13 @@ public class JugadorPartidoInformalService {
         return jugadorPartidoInformalRepository.findById(id);
     }
 
-    public List<JugadorPartidoInformal> getPorPartido(PartidoInformal partido) {
-        return jugadorPartidoInformalRepository.findByPartidoInformal(partido);
+    public List<JugadorPartidoInformalResponse> obtenerPorPartido(Long idPartido) {
+        List<JugadorPartidoInformal> jugadores = jugadorPartidoInformalRepository.findByPartidoInformal_IdPartidoInformal(idPartido);
+        return jugadores.stream()
+                .map(JugadorPartidoInformalResponse::new)
+                .toList();
     }
+
 
     public List<JugadorPartidoInformal> getPorJugador(Usuario jugador) {
         return jugadorPartidoInformalRepository.findByJugador(jugador);

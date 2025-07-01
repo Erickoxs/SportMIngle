@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClubesService {
@@ -67,6 +68,22 @@ public class ClubesService {
     public boolean existePorId(Long id) {
         return clubesRepository.existsById(id);
     }
+
+    public Optional<Clubes> obtenerPorId(Long id) {
+        return clubesRepository.findById(id);
+    }
+
+    public Clubes obtenerClubPorOrganizador(Long idOrganizador) {
+        Optional<Clubes> clubOptional = clubesRepository.obtenerClubPorOrganizador(idOrganizador);
+        if (clubOptional.isEmpty()) {
+            throw new RuntimeException("El usuario no tiene un club asociado como organizador");
+        }
+        return clubOptional.get();
+    }
+
+// continuar con inscripción al torneo
+
+
 
 
 }

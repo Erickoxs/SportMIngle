@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ClubesRepository extends JpaRepository<Clubes, Long> {
@@ -25,6 +26,10 @@ public interface ClubesRepository extends JpaRepository<Clubes, Long> {
             @Param("distancia") double distanciaEnMetros,
             @Param("deporte") String deporte
     );
+    @Query("SELECT c FROM Clubes c JOIN MiembroClub mc ON mc.club.id = c.id " +
+            "WHERE mc.deportista.id = :idOrganizador AND mc.activo = true")
+    Optional<Clubes> obtenerClubPorOrganizador(@Param("idOrganizador") Long idOrganizador);
+
 
 
 }

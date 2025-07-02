@@ -6,6 +6,7 @@ import com.SportMingle.servicios_SportMingle.Service.ChatService;
 import com.SportMingle.servicios_SportMingle.dto.MensajeChatDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.List;
 
@@ -18,9 +19,11 @@ public class ChatController {
 
 
     private final ChatService chatService;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public ChatController(ChatService chatService) {
+    public ChatController(ChatService chatService, SimpMessagingTemplate messagingTemplate) {
         this.chatService = chatService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @PostMapping("/enviar")
@@ -30,7 +33,12 @@ public class ChatController {
             @RequestBody MensajeRequest request
     ) {
         MensajeChat mensaje = chatService.enviarMensaje(idRemitente, idSala, request.contenido);
-        return ResponseEntity.ok(new MensajeChatDTO(mensaje));
+        MensajeChatDTO mensajeDTO = new MensajeChatDTO(mensaje);
+
+        // PUBLICA el mensaje a los suscriptores WebSocket
+        messagingTemplate.convertAndSend("/topic/chat/" + idSala, mensajeDTO);
+
+        return ResponseEntity.ok(mensajeDTO);
     }
 
     @GetMapping("/mensajes/{idSala}")

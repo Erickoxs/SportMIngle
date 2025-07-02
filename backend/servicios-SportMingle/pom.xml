@@ -87,6 +87,10 @@
 			<artifactId>jts-core</artifactId>
 			<version>1.18.2</version> <!-- o una versión más reciente si hay -->
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
 
 	</dependencies>
 

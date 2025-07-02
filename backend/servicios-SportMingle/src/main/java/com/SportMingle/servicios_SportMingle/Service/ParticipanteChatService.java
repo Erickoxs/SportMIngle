@@ -1,7 +1,11 @@
 package com.SportMingle.servicios_SportMingle.Service;
 
 import com.SportMingle.servicios_SportMingle.Model.ParticipanteChat;
+import com.SportMingle.servicios_SportMingle.Model.SalaChat;
+import com.SportMingle.servicios_SportMingle.Model.Usuario;
 import com.SportMingle.servicios_SportMingle.Repository.ParticipanteChatRepository;
+import com.SportMingle.servicios_SportMingle.Repository.SalaChatRepository;
+import com.SportMingle.servicios_SportMingle.Repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +16,16 @@ import java.util.Optional;
 @Service
 public class ParticipanteChatService {
 
-    private final ParticipanteChatRepository participanteChatRepository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private SalaChatRepository salaChatRepository;
+
+    @Autowired
+    private ParticipanteChatRepository participanteChatRepository;
+
+
 
     @Autowired
     public ParticipanteChatService(ParticipanteChatRepository participanteChatRepository) {
@@ -28,7 +41,18 @@ public class ParticipanteChatService {
     }
 
     public ParticipanteChat agregarParticipante(ParticipanteChat participante) {
-        participante.setFechaUnion(LocalDateTime.now());
+        Long idUsuario = participante.getUsuario().getIdUsuario();
+        Long idSala = participante.getSalaChat().getIdSala();
+
+        Usuario usuario = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        SalaChat sala = salaChatRepository.findById(idSala)
+                .orElseThrow(() -> new RuntimeException("Sala no encontrada"));
+
+        // ahora sí seteamos entidades gestionadas
+        participante.setUsuario(usuario);
+        participante.setSalaChat(sala);
+
         return participanteChatRepository.save(participante);
     }
 

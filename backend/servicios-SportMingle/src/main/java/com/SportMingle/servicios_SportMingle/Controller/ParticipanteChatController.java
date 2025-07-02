@@ -1,6 +1,9 @@
 package com.SportMingle.servicios_SportMingle.Controller;
 
 import com.SportMingle.servicios_SportMingle.Model.ParticipanteChat;
+import com.SportMingle.servicios_SportMingle.Repository.ParticipanteChatRepository;
+import com.SportMingle.servicios_SportMingle.Repository.SalaChatRepository;
+import com.SportMingle.servicios_SportMingle.Repository.UsuarioRepository;
 import com.SportMingle.servicios_SportMingle.Service.ParticipanteChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +15,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/participantes")
 public class ParticipanteChatController {
+
 
     private final ParticipanteChatService participanteChatService;
 

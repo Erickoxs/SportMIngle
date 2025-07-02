@@ -6,6 +6,7 @@ import FormularioPartido from "./views/FormularioPartido";
 import FormularioTorneo from "./views/FormularioTorneo";
 import FormularioClub from "./views/FormularioClub";
 import Details from "./views/Details";
+import SalaChat from "./views/SalaChat";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/crear/torneos" element={<FormularioTorneo />} />
         <Route path="/crear/clubes" element={<FormularioClub />} />
         <Route path="/details/:categoria/:id" element={<Details />} />
+        <Route path="chat/:idSala" element={<SalaChat/>}/>
       </Routes>
     </Router>
   );

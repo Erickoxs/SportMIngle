@@ -9,6 +9,7 @@ import MapContainer from '../components/MapContainer';
 import LogoSportMingle from '../components/LogoSportMingle';
 import BotonInscribirse from '../components/BotonInscribirse';
 import ListaInscripciones from '../components/InscriptionList';
+import ChatButton from '../components/ChatButton';
 
 
 // Axios personalizado
@@ -56,6 +57,10 @@ return (
     <BackArrow />
     <ImagenContainer categoria={categoria} item={item} />
     <InfoSection item={item} />
+    <ChatButton
+    tipoSala={categoria} // asegúrate que esté en formato esperado: "partido", "torneo", etc.
+    idReferencia={item.id || item.idPartidoInformal || item.idClub || item.idTorneo}
+  />
     <MapContainer lat={item.lat} lon={item.lon} nombre={item.nombre} />
     
     {/* ⬇️ Centrar botón */}

@@ -41,9 +41,15 @@ public class SalaChatService {
         return salaChatRepository.findByTipoSala(tipoSala);
     }
 
-    public List<SalaChat> getSalasPorTipoYReferencia(SalaChat.TipoSala tipoSala, Long idReferencia) {
+    public Optional<SalaChat> getSalasPorTipoYReferencia(SalaChat.TipoSala tipoSala, Long idReferencia) {
         return salaChatRepository.findByTipoSalaAndIdReferencia(tipoSala, idReferencia);
     }
+
+
+    public Optional<SalaChat> buscarPorTipoYReferencia(SalaChat.TipoSala tipoSala, Long idReferencia) {
+        return salaChatRepository.findByTipoSalaAndIdReferencia(tipoSala, idReferencia);
+    }
+
 
     public SalaChat crearSala(SalaChat sala) {
         switch (sala.getTipoSala()) {

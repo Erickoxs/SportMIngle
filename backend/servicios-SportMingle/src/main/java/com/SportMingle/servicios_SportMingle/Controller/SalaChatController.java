@@ -2,10 +2,12 @@ package com.SportMingle.servicios_SportMingle.Controller;
 
 import com.SportMingle.servicios_SportMingle.Model.SalaChat;
 import com.SportMingle.servicios_SportMingle.Service.SalaChatService;
+import com.SportMingle.servicios_SportMingle.dto.AbrirSalaRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,11 +40,47 @@ public class SalaChatController {
     }
 
     @GetMapping("/tipo/{tipo}/referencia/{idReferencia}")
-    public List<SalaChat> getSalasPorTipoYReferencia(
+    public Optional<SalaChat> getSalasPorTipoYReferencia(
             @PathVariable SalaChat.TipoSala tipo,
             @PathVariable Long idReferencia) {
         return salaChatService.getSalasPorTipoYReferencia(tipo, idReferencia);
     }
+    @PostMapping("/abrir")
+    public ResponseEntity<?> abrirSala(@RequestBody AbrirSalaRequest request) {
+        SalaChat.TipoSala tipo;
+
+        switch (request.getTipoSala()) {
+            case "partidos-informales":
+                tipo = SalaChat.TipoSala.partido;
+                break;
+            case "torneos":
+                tipo = SalaChat.TipoSala.torneo;
+                break;
+            case "clubes":
+                tipo = SalaChat.TipoSala.club;
+                break;
+
+            default:
+                return ResponseEntity.badRequest().body("Tipo de sala no reconocido: " + request.getTipoSala());
+        }
+
+        Optional<SalaChat> existente = salaChatService.buscarPorTipoYReferencia(tipo, request.getIdReferencia());
+
+        if (existente.isPresent()) {
+            return ResponseEntity.ok(existente.get());
+        }
+
+        SalaChat nuevaSala = new SalaChat();
+        nuevaSala.setTipoSala(tipo);
+        nuevaSala.setIdReferencia(request.getIdReferencia());
+        nuevaSala.setFechaCreacion(LocalDateTime.now());
+        nuevaSala.setNombreSala("Sala de " + tipo + " #" + request.getIdReferencia());
+
+        SalaChat creada = salaChatService.crearSala(nuevaSala);
+        return ResponseEntity.ok(creada);
+    }
+
+
 
     @PostMapping
     public ResponseEntity<SalaChat> crearSala(@RequestBody SalaChat sala) {

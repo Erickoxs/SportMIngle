@@ -3,6 +3,7 @@ package com.SportMingle.servicios_SportMingle.Controller;
 import com.SportMingle.servicios_SportMingle.Model.MensajeChat;
 import com.SportMingle.servicios_SportMingle.Model.MensajeEliminado;
 import com.SportMingle.servicios_SportMingle.Service.ChatService;
+import com.SportMingle.servicios_SportMingle.dto.EliminacionWebSocketDTO;
 import com.SportMingle.servicios_SportMingle.dto.MensajeChatDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,11 +55,16 @@ public class ChatController {
     public ResponseEntity<Void> eliminarMensajeParaUsuario(
             @RequestParam Long idMensaje,
             @RequestParam Long idUsuario,
+            @RequestParam Long idSala,
             @RequestParam MensajeEliminado.Razon razon
     ) {
         chatService.eliminarMensajeParaUsuario(idMensaje, idUsuario, razon);
+
+        messagingTemplate.convertAndSend("/topic/chat/" + idSala, new EliminacionWebSocketDTO(idMensaje));
+
         return ResponseEntity.noContent().build();
     }
+
 
     @PutMapping("/ultima-vista")
     public ResponseEntity<Void> actualizarUltimaVista(

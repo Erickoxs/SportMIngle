@@ -51,33 +51,47 @@ const SalaChat = () => {
   }, [idSala, idUsuarioActual, token]);
 
   // ✅ Conexión WebSocket
-  useEffect(() => {
-    if (!idUsuarioActual) return;
+  // ✅ Conexión WebSocket
+useEffect(() => {
+  if (!idUsuarioActual) return;
 
-    const socket = new SockJS('http://localhost:8080/ws-chat');
-    const stompClient = new Client({
-      webSocketFactory: () => socket,
-      reconnectDelay: 5000,
-      onConnect: () => {
-        console.log('[DEBUG] Conectado al WebSocket');
-        stompClient.subscribe(`/topic/chat/${idSala}`, (mensaje) => {
-          const nuevoMensaje = JSON.parse(mensaje.body);
-          console.log('[DEBUG] Mensaje recibido vía WebSocket:', nuevoMensaje);
+  const socket = new SockJS('http://localhost:8080/ws-chat');
+  const stompClient = new Client({
+    webSocketFactory: () => socket,
+    reconnectDelay: 5000,
+    onConnect: () => {
+      console.log('[DEBUG] Conectado al WebSocket');
+      
+      stompClient.subscribe(`/topic/chat/${idSala}`, (mensaje) => {
+        const nuevoMensaje = JSON.parse(mensaje.body);
+        console.log('[DEBUG] Mensaje recibido vía WebSocket:', nuevoMensaje);
+
+        if (nuevoMensaje.tipo === 'MENSAJE_ELIMINADO') {
+  setMensajes((prev) =>
+    prev.map((m) =>
+      m.idMensaje === nuevoMensaje.idMensaje
+        ? { ...m, eliminado: true }
+        : m
+    )
+  );
+} else {
           setMensajes((prev) => [...prev, nuevoMensaje]);
-        });
-      },
-      onStompError: (frame) => {
-        console.error('[ERROR] STOMP error:', frame.headers['message']);
-      }
-    });
+        }
+      });
+    },
+    onStompError: (frame) => {
+      console.error('[ERROR] STOMP error:', frame.headers['message']);
+    }
+  });
 
-    stompClient.activate();
+  stompClient.activate();
 
-    return () => {
-      console.log('[DEBUG] Desconectando WebSocket');
-      stompClient.deactivate();
-    };
-  }, [idSala, idUsuarioActual]);
+  return () => {
+    console.log('[DEBUG] Desconectando WebSocket');
+    stompClient.deactivate();
+  };
+}, [idSala, idUsuarioActual]);
+
 
   const enviarMensaje = async (contenido) => {
     try {
@@ -99,7 +113,7 @@ const SalaChat = () => {
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       <ChatHeader nombreSala={sala.nombreSala} />
-      <MessageList mensajes={mensajes} idUsuarioActual={idUsuarioActual} />
+      <MessageList mensajes={mensajes} idUsuarioActual={idUsuarioActual} idSala={idSala}/>
       <MessageInput onEnviar={enviarMensaje} />
     </div>
   );

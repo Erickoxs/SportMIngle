@@ -4,6 +4,7 @@ import SectionBar from '../components/SectionBar';
 import CategoryButton from '../components/CategoryButton';
 import CreateButton from '../components/CreateButton';
 import ContentContainer from '../components/ContentContainer';
+import BotonMiClub from '../components/BotonMiClub';
 
 const categorias = ['partidos-informales', 'torneos', 'clubes'];
 
@@ -34,6 +35,8 @@ function Home() {
             />
           ))}
         </div>
+
+       <BotonMiClub visible={categoriaSeleccionada === 'clubes'} />  {/* <-- Aquí va el botón Mi Club */}
 
         {/* Contenido */}
         <ContentContainer

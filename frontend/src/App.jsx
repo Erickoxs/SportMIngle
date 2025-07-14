@@ -7,6 +7,9 @@ import FormularioTorneo from "./views/FormularioTorneo";
 import FormularioClub from "./views/FormularioClub";
 import Details from "./views/Details";
 import SalaChat from "./views/SalaChat";
+import VistaMiClub from "./views/VistaMiClub";
+import VistaInvitarJugador from "./views/VistaInvitarJugador";
+import VistaSolicitudes from "./views/VistasSolicitudes";
 
 const App = () => {
   return (
@@ -20,6 +23,9 @@ const App = () => {
         <Route path="/crear/clubes" element={<FormularioClub />} />
         <Route path="/details/:categoria/:id" element={<Details />} />
         <Route path="chat/:idSala" element={<SalaChat/>}/>
+        <Route path="/mi-club/:id" element={<VistaMiClub/>}/>
+         <Route path="/solicitudes" element={<VistaSolicitudes />} />
+        <Route path="/invitar-jugador" element={<VistaInvitarJugador />} />
       </Routes>
     </Router>
   );

@@ -23,18 +23,10 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
       let payload = {};
 
       switch (categoria) {
-        case 'clubes':
-          
-          ruta = '/api/miembros';
-          payload = {
-            club: { id: idItem },
-            deportista: { idUsuario: idUsuario },
-            rol: 'miembro',
-            fechaUnion: new Date().toISOString().split('T')[0],
-            activo: true
-          };
-          break;
-
+   case 'clubes':
+  ruta = `/api/solicitudes/solicitar?idUsuario=${idUsuario}&idClub=${idItem}`;
+  payload = null; // no se envía body, solo los params
+  break;
         case 'partidos-informales':
         
           ruta = '/api/jugadores';

@@ -23,8 +23,8 @@ const App = () => {
         <Route path="/crear/clubes" element={<FormularioClub />} />
         <Route path="/details/:categoria/:id" element={<Details />} />
         <Route path="chat/:idSala" element={<SalaChat/>}/>
-        <Route path="/mi-club/:id" element={<VistaMiClub/>}/>
-         <Route path="/solicitudes" element={<VistaSolicitudes />} />
+        <Route path="/mi-club/:idClub" element={<VistaMiClub/>}/>
+         <Route path="/solicitudes/:idClub" element={<VistaSolicitudes />} />
         <Route path="/invitar-jugador" element={<VistaInvitarJugador />} />
       </Routes>
     </Router>

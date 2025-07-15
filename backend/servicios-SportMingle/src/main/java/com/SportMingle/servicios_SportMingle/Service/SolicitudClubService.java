@@ -6,6 +6,8 @@ import com.SportMingle.servicios_SportMingle.Model.SolicitudClub;
 import com.SportMingle.servicios_SportMingle.Model.Usuario;
 import com.SportMingle.servicios_SportMingle.Repository.MiembroRepository;
 import com.SportMingle.servicios_SportMingle.Repository.SolicitudClubRepository;
+import com.SportMingle.servicios_SportMingle.dto.ClubResponse;
+import com.SportMingle.servicios_SportMingle.dto.SolicitudClubDTO;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -78,7 +80,18 @@ public class SolicitudClubService {
         repo.save(solicitud);
     }
 
-    public List<SolicitudClub> obtenerSolicitudesPendientesPorClub(Long idClub) {
-        return repo.findByClubIdAndEstado(idClub, SolicitudClub.EstadoSolicitud.PENDIENTE);
+    public List<SolicitudClubDTO> obtenerSolicitudesDTOPorClub(Long idClub) {
+        List<SolicitudClub> solicitudes = repo.findByClubIdAndEstado(idClub, SolicitudClub.EstadoSolicitud.PENDIENTE);
+
+        return solicitudes.stream()
+                .filter(s -> !s.isEsInvitacion()) // solo solicitudes, no invitaciones
+                .map(s -> new SolicitudClubDTO(
+                        s.getId(),
+                        s.getEstado().name(),
+                        s.isEsInvitacion(),
+                        s.getUsuario().getNombre(),
+                        new ClubResponse(s.getClub())
+                ))
+                .toList();
     }
 }

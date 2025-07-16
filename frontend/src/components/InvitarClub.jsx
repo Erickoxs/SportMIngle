@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 const InvitarClub = () => {
   const { idClub } = useParams();
-  const url = `https://sportmingle.com/unirse/club/${idClub}`;
+  const url = `${window.location.origin}/unirse/club/${idClub}`;
 
   return (
     <div className="pt-8 px-6 flex flex-col items-center justify-start min-h-[60vh]">

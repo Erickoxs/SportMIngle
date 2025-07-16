@@ -10,6 +10,7 @@ import SalaChat from "./views/SalaChat";
 import VistaMiClub from "./views/VistaMiClub";
 import VistaInvitarJugador from "./views/VistaInvitarJugador";
 import VistaSolicitudes from "./views/VistasSolicitudes";
+import UnirseAlClub from "./components/UnirseAlClub";
 
 const App = () => {
   return (
@@ -25,7 +26,8 @@ const App = () => {
         <Route path="chat/:idSala" element={<SalaChat/>}/>
         <Route path="/mi-club/:idClub" element={<VistaMiClub/>}/>
          <Route path="/solicitudes/:idClub" element={<VistaSolicitudes />} />
-        <Route path="/invitar-jugador" element={<VistaInvitarJugador />} />
+        <Route path="/invitar-jugador/:idClub" element={<VistaInvitarJugador />} />
+        <Route path="/unirse/club/:idClub" element={<UnirseAlClub />} />
       </Routes>
     </Router>
   );

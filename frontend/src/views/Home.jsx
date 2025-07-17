@@ -22,33 +22,31 @@ function Home() {
         <Logo />
       </header>
 
-      <main className="mt-6 px-6">
-        {/* Botones de categoría */}
-        <div className="flex justify-center items-center gap-6 mb-6">
-          {categorias.map((cat) => (
-            <CategoryButton
-              key={cat}
-              texto={cat}
-              activo={cat === categoriaSeleccionada}
-              onClick={() => setCategoriaSeleccionada(cat)}
-              size="sm"
-            />
-          ))}
-        </div>
+      <main className="mt-6 px-4 sm:px-6 md:px-12 lg:px-24 xl:px-48 max-w-screen-xl mx-auto">
+  {/* Botones de categoría */}
+  <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-6">
+    {categorias.map((cat) => (
+      <CategoryButton
+        key={cat}
+        texto={cat}
+        activo={cat === categoriaSeleccionada}
+        onClick={() => setCategoriaSeleccionada(cat)}
+        size="sm"
+      />
+    ))}
+  </div>
 
-       <BotonMiClub visible={categoriaSeleccionada === 'clubes'} />  {/* <-- Aquí va el botón Mi Club */}
+  <BotonMiClub visible={categoriaSeleccionada === 'clubes'} />
 
-        {/* Contenido */}
-        <ContentContainer
-          categoria={categoriaSeleccionada}
-          deporte={deporteSeleccionado}
-        />
+  <ContentContainer
+    categoria={categoriaSeleccionada}
+    deporte={deporteSeleccionado}
+  />
 
-        {/* Botón de crear */}
-        <div className="mt-8 flex justify-center">
-          <CreateButton categoria={categoriaSeleccionada} />
-        </div>
-      </main>
+  <div className="mt-8 flex justify-center">
+    <CreateButton categoria={categoriaSeleccionada} />
+  </div>
+</main>
 
       {/* Barra inferior */}
       <footer className="fixed bottom-0 left-0 w-full bg-white shadow-md">

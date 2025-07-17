@@ -50,28 +50,33 @@ function Details() {
   if (!item) return <p>No se encontró el contenido.</p>;
 
 return (
-  <div className="p-4 space-y-6">
+  <div className="px-4 sm:px-6 md:px-12 lg:px-24 xl:px-48 py-6 max-w-screen-lg mx-auto space-y-8">
     <div className="flex justify-center">
       <LogoSportMingle />
     </div>
-    <BackArrow />
+    
+    <div className="mt-2">
+      <BackArrow />
+    </div>
+
     <ImagenContainer categoria={categoria} item={item} />
     <InfoSection item={item} />
+
     <ChatButton
-    tipoSala={categoria} // asegúrate que esté en formato esperado: "partido", "torneo", etc.
-    idReferencia={item.id || item.idPartidoInformal || item.idClub || item.idTorneo}
-  />
+      tipoSala={categoria}
+      idReferencia={item.id || item.idPartidoInformal || item.idClub || item.idTorneo}
+    />
+
     <MapContainer lat={item.lat} lon={item.lon} nombre={item.nombre} />
-    
-    {/* ⬇️ Centrar botón */}
+
     <div className="flex justify-center">
       <BotonInscribirse
         categoria={categoria}
         idItem={item.id || item.idPartidoInformal || item.idClub || item.idTorneo}
         deporteTorneo={item.deporte}
       />
-      
     </div>
+
     <ListaInscripciones categoria={categoria} id={id} />
   </div>
 );

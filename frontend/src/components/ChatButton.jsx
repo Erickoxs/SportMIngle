@@ -79,11 +79,12 @@ const ChatButton = ({ tipoSala, idReferencia }) => {
 
   return (
     <button
-      onClick={abrirSalaChat}
-      className="bg-purple-600 text-white px-4 py-2 rounded-full shadow-md hover:bg-purple-700 transition duration-200"
-    >
-      Abrir Chat
-    </button>
+  onClick={abrirSalaChat}
+  className="bg-[#009b3a] hover:bg-green-800 text-white px-4 py-2 rounded-full shadow-md transition duration-200"
+>
+  Abrir Chat
+</button>
+
   );
 };
 

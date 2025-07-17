@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
+import BackArrow from '../components/BackArrow';
 import api from '../utils/api';
 import MapaSelector from '../components/MapSelector';
 
@@ -84,6 +85,7 @@ function FormularioPartido() {
       onSubmit={handleSubmit}
       className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md space-y-5"
     >
+      <BackArrow onClick={() => navigate(-1)} />
       <h2 className="text-2xl font-semibold text-[#009b3a] text-center">
         Crear Partido Informal
       </h2>

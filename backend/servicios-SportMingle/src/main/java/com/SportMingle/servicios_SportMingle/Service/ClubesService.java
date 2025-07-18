@@ -1,9 +1,11 @@
 package com.SportMingle.servicios_SportMingle.Service;
 
 import com.SportMingle.servicios_SportMingle.Model.Clubes;
+import com.SportMingle.servicios_SportMingle.Model.MiembroClub;
 import com.SportMingle.servicios_SportMingle.Model.Usuario;
 import com.SportMingle.servicios_SportMingle.Model.Deporte;
 import com.SportMingle.servicios_SportMingle.Repository.ClubesRepository;
+import com.SportMingle.servicios_SportMingle.Repository.MiembroRepository;
 import com.SportMingle.servicios_SportMingle.Repository.UsuarioRepository;
 import com.SportMingle.servicios_SportMingle.Repository.DeporteRepository;
 import com.SportMingle.servicios_SportMingle.dto.CreateClubRequest;
@@ -24,6 +26,9 @@ public class ClubesService {
 
     @Autowired
     private ClubesRepository clubesRepository;
+
+    @Autowired
+    private MiembroRepository miembroClubRepository;
 
     @Autowired
     private DeporteRepository deporteRepository;
@@ -54,8 +59,19 @@ public class ClubesService {
         club.setAdministrador(administrador);
         club.setUbicacion(ubicacion);
 
-        return clubesRepository.save(club);
+        Clubes clubGuardado = clubesRepository.save(club);
+
+        // Registrar al administrador como miembro activo
+        MiembroClub miembro = new MiembroClub();
+        miembro.setClub(clubGuardado);
+        miembro.setDeportista(administrador);
+        miembro.setActivo(true);
+        // miembro.setRol("ADMIN"); // si tienes ese campo
+        miembroClubRepository.save(miembro);
+
+        return clubGuardado;
     }
+
 
 
     public List<Clubes> obtenerClubesCercanos(double lat, double lon, double distancia, String deporte) {

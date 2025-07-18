@@ -11,23 +11,98 @@ import VistaMiClub from "./views/VistaMiClub";
 import VistaInvitarJugador from "./views/VistaInvitarJugador";
 import VistaSolicitudes from "./views/VistasSolicitudes";
 import UnirseAlClub from "./components/UnirseAlClub";
+import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
   return (
     <Router>
       <Routes>
+        {/* Públicas */}
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/crear/partidos-informales" element={<FormularioPartido />} />
-        <Route path="/crear/torneos" element={<FormularioTorneo />} />
-        <Route path="/crear/clubes" element={<FormularioClub />} />
-        <Route path="/details/:categoria/:id" element={<Details />} />
-        <Route path="chat/:idSala" element={<SalaChat/>}/>
-        <Route path="/mi-club/:idClub" element={<VistaMiClub/>}/>
-         <Route path="/solicitudes/:idClub" element={<VistaSolicitudes />} />
-        <Route path="/invitar-jugador/:idClub" element={<VistaInvitarJugador />} />
-        <Route path="/unirse/club/:idClub" element={<UnirseAlClub />} />
+        
+
+        {/* Protegidas */}
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/crear/partidos-informales"
+          element={
+            <PrivateRoute>
+              <FormularioPartido />
+            </PrivateRoute>
+          }
+        />
+        <Route
+  path="/unirse/club/:idClub"
+  element={
+    <PrivateRoute>
+      <UnirseAlClub />
+    </PrivateRoute>
+  }
+/>
+        <Route
+          path="/crear/torneos"
+          element={
+            <PrivateRoute>
+              <FormularioTorneo />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/crear/clubes"
+          element={
+            <PrivateRoute>
+              <FormularioClub />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/details/:categoria/:id"
+          element={
+            <PrivateRoute>
+              <Details />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/chat/:idSala"
+          element={
+            <PrivateRoute>
+              <SalaChat />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/mi-club/:idClub"
+          element={
+            <PrivateRoute>
+              <VistaMiClub />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/solicitudes/:idClub"
+          element={
+            <PrivateRoute>
+              <VistaSolicitudes />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/invitar-jugador/:idClub"
+          element={
+            <PrivateRoute>
+              <VistaInvitarJugador />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );

@@ -41,14 +41,14 @@ function TarjetaCategoria({ categoria, item }) {
           {console.log('🔗 URL imagen torneo:', item.imagenTorneo)}
 
           <img
-            src={
-              item.imagenTorneo
-                ? `http://localhost:8080/${item.imagenTorneo.replace(/\\/g, '/')}`
-                : '/placeholder-torneo.jpg'
-            }
-            alt="Torneo"
-            className="w-full h-48 object-cover rounded"
-          />
+  src={
+    item.imagenTorneo
+      ? `${import.meta.env.VITE_API_URL}/${item.imagenTorneo.replace(/\\/g, '/')}`
+      : '/placeholder-torneo.jpg'
+  }
+  alt="Torneo"
+  className="w-full h-48 object-cover rounded"
+/>
           <h3 className="text-lg font-semibold text-gray-800">{item.nombre}</h3>
           <p className="text-sm text-gray-600">Costo de inscripción: ${item.costoInscripcion}</p>
           <p className="text-sm text-gray-600">Inicio: {item.fechaInicio}</p>
@@ -59,15 +59,15 @@ function TarjetaCategoria({ categoria, item }) {
         <>
           {console.log('🔗 URL logo club:', item.logoUrl)}
 
-          <img
-            src={
-              item.logoUrl
-                ? `http://localhost:8080/${item.logoUrl.replace(/\\/g, '/')}`
-                : '/placeholder-club.jpg'
-            }
-            alt="Logo del Club"
-            className="w-full h-48 object-contain bg-gray-100 rounded"
-          />
+         <img
+  src={
+    item.logoUrl
+      ? `${import.meta.env.VITE_API_URL}/${item.logoUrl.replace(/\\/g, '/')}`
+      : '/placeholder-club.jpg'
+  }
+  alt="Logo del Club"
+  className="w-full h-48 object-contain bg-gray-100 rounded"
+/>
           <h3 className="text-lg font-semibold text-gray-800">{item.nombre}</h3>
           <p className="text-sm text-gray-600">Dirección: {item.direccion}</p>
         </>

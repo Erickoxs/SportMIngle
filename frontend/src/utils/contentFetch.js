@@ -4,7 +4,8 @@ export async function obtenerContenidoPorCategoriaYDeporte(categoria, deporte, l
   const token = localStorage.getItem('token');
   console.log("Token enviado:", token);
 
-  const url = `http://localhost:8080/api/${categoria}/cercanos`;
+  const baseURL = import.meta.env.VITE_API_URL; // Usa variable de entorno
+  const url = `${baseURL}/api/${categoria}/cercanos`;
 
   try {
     const response = await axios({

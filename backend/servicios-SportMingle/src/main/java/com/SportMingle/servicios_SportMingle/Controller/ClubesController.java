@@ -80,21 +80,22 @@ public class ClubesController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
-        Clubes club = new Clubes();
-        club.setNombre(nombre);
-        club.setDescripcion(descripcion);
-        club.setFechaFundacion(fechaFundacion);
-        club.setLogoUrl(logoUrl);
-        club.setUbicacion(geometryFactory.createPoint(new Coordinate(lon, lat)));
-        club.getUbicacion().setSRID(4326);
+        // ✅ Crear DTO
+        // ✅ Crear DTO usando setters
+        CreateClubRequest dto = new CreateClubRequest();
+        dto.setNombre(nombre);
+        dto.setDescripcion(descripcion);
+        dto.setLogoUrl(logoUrl);
+        dto.setFechaFundacion(fechaFundacion);
+        dto.setIdDeporte(id_deporte);
+        dto.setIdAdministrador(id_usuario_administrador);
+        dto.setLat(lat);
+        dto.setLng(lon);
 
-        Usuario admin = usuarioService.findById(id_usuario_administrador);
-        Deporte deporte = deporteService.obtenerDeportePorId(id_deporte);
 
-        club.setAdministrador(admin);
-        club.setDeporte(deporte);
-
-        return ResponseEntity.ok(clubesRepository.save(club));
+        // ✅ Llamar al servicio, que sí guarda el miembro
+        Clubes clubCreado = clubesService.crearClub(dto);
+        return ResponseEntity.ok(clubCreado);
     }
 
 

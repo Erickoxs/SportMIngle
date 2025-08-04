@@ -27,7 +27,7 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
   ruta = `/api/solicitudes/solicitar?idUsuario=${idUsuario}&idClub=${idItem}`;
   payload = null; // no se envía body, solo los params
   break;
-        case 'partidos-informales':
+        case 'partidos':
         
           ruta = '/api/jugadores';
           payload = {

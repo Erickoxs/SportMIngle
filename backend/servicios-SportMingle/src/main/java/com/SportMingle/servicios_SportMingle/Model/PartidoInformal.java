@@ -6,12 +6,12 @@ import org.locationtech.jts.geom.Point;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "partidos_informales")
+@Table(name = "partidos")
 public class PartidoInformal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPartidoInformal;
+    private Long idPartido;
 
     @ManyToOne
     @JoinColumn(name = "id_organizador", nullable = false)
@@ -49,11 +49,11 @@ public class PartidoInformal {
     // Getters y Setters
 
     public Long getIdPartidoInformal() {
-        return idPartidoInformal;
+        return idPartido;
     }
 
-    public void setIdPartidoInformal(Long idPartidoInformal) {
-        this.idPartidoInformal = idPartidoInformal;
+    public void setIdPartidoInformal(Long idPartido) {
+        this.idPartido = idPartido;
     }
 
     public Usuario getOrganizador() {

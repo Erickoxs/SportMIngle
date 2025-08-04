@@ -23,7 +23,7 @@ function TarjetaCategoria({ categoria, item }) {
       className="bg-white shadow-md rounded-lg overflow-hidden p-4 space-y-2 cursor-pointer hover:shadow-lg transition"
       onClick={handleClick}
     >
-      {categoria === 'partidos-informales' && (
+      {categoria === 'partidos' && (
         <>
           <img
             src={imagenAleatoria}

@@ -50,7 +50,7 @@ public class SalaChatController {
         SalaChat.TipoSala tipo;
 
         switch (request.getTipoSala()) {
-            case "partidos-informales":
+            case "partidos":
                 tipo = SalaChat.TipoSala.partido;
                 break;
             case "torneos":

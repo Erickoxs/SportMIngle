@@ -26,13 +26,13 @@ const App = () => {
         <Route
           path="/home"
           element={
-            <PrivateRoute>
+            
               <Home />
-            </PrivateRoute>
+            
           }
         />
         <Route
-          path="/crear/partidos-informales"
+          path="/crear/partidos"
           element={
             <PrivateRoute>
               <FormularioPartido />

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/partidos")
+@RequestMapping("/api/partidos-torneo")
 public class PartidoTorneoController {
 
     private final PartidoTorneoService partidoTorneoService;

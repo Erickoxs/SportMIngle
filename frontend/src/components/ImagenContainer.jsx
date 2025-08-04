@@ -13,7 +13,7 @@ function ImagenContainer({ categoria, item }) {
   let imageUrl = '';
   let altText = item.nombre || 'Imagen';
 
-  if (categoria === 'partidos-informales') {
+  if (categoria === 'partidos') {
     imageUrl = imagenesInformales[Math.floor(Math.random() * imagenesInformales.length)];
   }
 

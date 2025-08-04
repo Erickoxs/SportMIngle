@@ -61,7 +61,7 @@ function FormularioPartido() {
 
 
     try {
-      const response = await api.post('/api/partidos-informales', nuevoPartido, {
+      const response = await api.post('/api/partidos', nuevoPartido, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

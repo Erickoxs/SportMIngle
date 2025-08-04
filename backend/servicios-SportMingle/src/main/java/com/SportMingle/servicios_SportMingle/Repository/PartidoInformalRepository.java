@@ -26,7 +26,7 @@ public interface PartidoInformalRepository extends JpaRepository<PartidoInformal
     // Puedes agregar más consultas específicas según las necesidades
 
     @Query(value = """
-    SELECT p.* FROM partidos_informales p
+    SELECT p.* FROM partidos p
     JOIN deportes d ON p.id_deporte = d.id_deporte
     WHERE d.nombre = :nombreDeporte
     AND ST_DWithin(p.ubicacion, :ubicacion, :distancia)

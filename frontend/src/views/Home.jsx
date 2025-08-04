@@ -6,11 +6,11 @@ import CreateButton from '../components/CreateButton';
 import ContentContainer from '../components/ContentContainer';
 import BotonMiClub from '../components/BotonMiClub';
 
-const categorias = ['partidos-informales', 'torneos', 'clubes'];
+const categorias = ['partidos', 'torneos', 'clubes'];
 
 function Home() {
   const [deporteSeleccionado, setDeporteSeleccionado] = useState('Fútbol');
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('partidos-informales');
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('partidos');
 
   const handleDeporteChange = (deporte) => {
     setDeporteSeleccionado(deporte);

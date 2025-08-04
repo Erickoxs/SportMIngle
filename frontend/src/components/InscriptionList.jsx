@@ -17,7 +17,7 @@ const ListaInscripciones = ({ categoria, id }) => {
           case 'torneos':
             url = `/api/inscripciones/torneo/${id}`;
             break;
-          case 'partidos-informales':
+          case 'partidos':
             url = `/api/jugadores/por-partido/${id}`;
             break;
           case 'clubes':
@@ -76,7 +76,7 @@ const ListaInscripciones = ({ categoria, id }) => {
                 <strong>Club:</strong> {inscripcion.nombreClub || 'Desconocido'}
               </>
             )}
-            {categoria === 'partidos-informales' && (
+            {categoria === 'partidos' && (
               <>
                 <strong>Jugador:</strong> {inscripcion.nombreJugador || 'Desconocido'}
               </>

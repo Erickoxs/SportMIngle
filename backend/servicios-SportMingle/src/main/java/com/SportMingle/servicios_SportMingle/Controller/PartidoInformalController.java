@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/partidos-informales")
+@RequestMapping("/api/partidos")
 public class PartidoInformalController {
 
     @Autowired

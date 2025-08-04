@@ -15,7 +15,7 @@ public interface JugadorPartidoInformalRepository extends JpaRepository<JugadorP
     // Obtener todas las inscripciones de un jugador específico
     List<JugadorPartidoInformal> findByJugador(Usuario jugador);
 
-    List<JugadorPartidoInformal> findByPartidoInformal_IdPartidoInformal(Long idPartido);
+    List<JugadorPartidoInformal> findByPartidoInformal_IdPartido(Long idPartido);
 
 
 

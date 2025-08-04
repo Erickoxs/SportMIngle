@@ -29,7 +29,7 @@ public class JugadorPartidoInformalService {
     }
 
     public List<JugadorPartidoInformalResponse> obtenerPorPartido(Long idPartido) {
-        List<JugadorPartidoInformal> jugadores = jugadorPartidoInformalRepository.findByPartidoInformal_IdPartidoInformal(idPartido);
+        List<JugadorPartidoInformal> jugadores = jugadorPartidoInformalRepository.findByPartidoInformal_IdPartido(idPartido);
         return jugadores.stream()
                 .map(JugadorPartidoInformalResponse::new)
                 .toList();

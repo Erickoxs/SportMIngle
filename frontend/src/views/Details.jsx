@@ -64,7 +64,7 @@ return (
 
     <ChatButton
       tipoSala={categoria}
-      idReferencia={item.id || item.idPartidoInformal || item.idClub || item.idTorneo}
+      idReferencia={item.id || item.idPartido || item.idClub || item.idTorneo}
     />
 
     <MapContainer lat={item.lat} lon={item.lon} nombre={item.nombre} />
@@ -72,7 +72,7 @@ return (
     <div className="flex justify-center">
       <BotonInscribirse
         categoria={categoria}
-        idItem={item.id || item.idPartidoInformal || item.idClub || item.idTorneo}
+        idItem={item.id || item.idPartido || item.idClub || item.idTorneo}
         deporteTorneo={item.deporte}
       />
     </div>

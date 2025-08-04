@@ -11,7 +11,7 @@ public class JugadorPartidoInformal {
     private Long idInscripcion;
 
     @ManyToOne
-    @JoinColumn(name = "id_partido_informal", nullable = false)
+    @JoinColumn(name = "id_partido", nullable = false)
     private PartidoInformal partidoInformal;
 
     @ManyToOne

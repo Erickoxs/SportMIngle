@@ -43,7 +43,7 @@ function TarjetaCategoria({ categoria, item }) {
           <img
   src={
     item.imagenTorneo
-      ? `${import.meta.env.VITE_API_URL}/${item.imagenTorneo.replace(/\\/g, '/')}`
+      ? `${item.imagenTorneo.replace(/\\/g, '/')}`
       : '/placeholder-torneo.jpg'
   }
   alt="Torneo"
@@ -62,7 +62,7 @@ function TarjetaCategoria({ categoria, item }) {
          <img
   src={
     item.logoUrl
-      ? `${import.meta.env.VITE_API_URL}/${item.logoUrl.replace(/\\/g, '/')}`
+      ? `${item.logoUrl.replace(/\\/g, '/')}`
       : '/placeholder-club.jpg'
   }
   alt="Logo del Club"

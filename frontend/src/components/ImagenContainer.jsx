@@ -19,13 +19,13 @@ function ImagenContainer({ categoria, item }) {
 
   if (categoria === 'torneos') {
     imageUrl = item.imagenTorneo
-      ? `http://localhost:8080/${item.imagenTorneo.replace(/\\/g, '/')}`
+      ? `${item.imagenTorneo.replace(/\\/g, '/')}`
       : '/placeholder-torneo.jpg';
   }
 
   if (categoria === 'clubes') {
     imageUrl = item.logoUrl
-      ? `http://localhost:8080/${item.logoUrl.replace(/\\/g, '/')}`
+      ? `${item.logoUrl.replace(/\\/g, '/')}`
       : '/placeholder-club.jpg';
   }
 

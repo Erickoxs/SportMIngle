@@ -1,16 +1,13 @@
 package com.SportMingle.servicios_SportMingle.Controller;
 
 import com.SportMingle.servicios_SportMingle.Model.Clubes;
-import com.SportMingle.servicios_SportMingle.Model.Deporte;
-import com.SportMingle.servicios_SportMingle.Model.Usuario;
 import com.SportMingle.servicios_SportMingle.Repository.ClubesRepository;
 import com.SportMingle.servicios_SportMingle.Service.ClubesService;
+import com.SportMingle.servicios_SportMingle.Service.CloudinaryService;
 import com.SportMingle.servicios_SportMingle.Service.DeporteService;
-import com.SportMingle.servicios_SportMingle.Service.UsuarioService;
 import com.SportMingle.servicios_SportMingle.Service.UsuarioServiceImpl;
 import com.SportMingle.servicios_SportMingle.dto.ClubResponse;
 import com.SportMingle.servicios_SportMingle.dto.CreateClubRequest;
-import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,17 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/clubes")
 public class ClubesController {
-
 
     @Autowired
     private ClubesService clubesService;
@@ -46,6 +39,9 @@ public class ClubesController {
 
     @Autowired
     private ClubesRepository clubesRepository;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     // Crear un club
     @PostMapping
@@ -64,24 +60,19 @@ public class ClubesController {
 
         try {
             if (logo != null && !logo.isEmpty()) {
-                String nombreLogo = logo.getOriginalFilename();
-                Path uploadsDir = Paths.get("uploads");
-                if (!Files.exists(uploadsDir)) {
-                    Files.createDirectories(uploadsDir);
-                }
-                Path rutaLogo = uploadsDir.resolve(nombreLogo);
-                Files.copy(logo.getInputStream(), rutaLogo, StandardCopyOption.REPLACE_EXISTING);
-                logoUrl = rutaLogo.toString();
-                System.out.println("✅ Logo guardado en: " + logoUrl);
+                // Subir a Cloudinary
+                Map uploadResult = cloudinaryService.uploadFile(logo, "clubes");
+                logoUrl = uploadResult.get("secure_url").toString();
+                System.out.println("✅ Logo subido a Cloudinary: " + logoUrl);
+            } else {
+                System.out.println("⚠️ No se recibió logo para el club");
             }
         } catch (IOException e) {
-            System.out.println("❌ Error al guardar el logo: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("❌ Error al subir el logo a Cloudinary: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
-        // ✅ Crear DTO
-        // ✅ Crear DTO usando setters
+        // Crear DTO para pasar al servicio
         CreateClubRequest dto = new CreateClubRequest();
         dto.setNombre(nombre);
         dto.setDescripcion(descripcion);
@@ -92,15 +83,11 @@ public class ClubesController {
         dto.setLat(lat);
         dto.setLng(lon);
 
-
-        // ✅ Llamar al servicio, que sí guarda el miembro
         Clubes clubCreado = clubesService.crearClub(dto);
         return ResponseEntity.ok(clubCreado);
     }
 
-
     // Buscar clubes cercanos
-
     @GetMapping("/cercanos")
     public ResponseEntity<List<ClubResponse>> buscarClubesCercanos(
             @RequestParam double lat,
@@ -131,8 +118,4 @@ public class ClubesController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
-
-
-
-
 }

@@ -49,12 +49,22 @@ public class ParticipanteChatService {
         SalaChat sala = salaChatRepository.findById(idSala)
                 .orElseThrow(() -> new RuntimeException("Sala no encontrada"));
 
-        // ahora sí seteamos entidades gestionadas
+        // 🔍 Verificar si ya existe
+        Optional<ParticipanteChat> existente = participanteChatRepository
+                .findBySalaChat_IdSalaAndUsuario_IdUsuario(idSala, idUsuario );
+
+        if (existente.isPresent()) {
+            // Ya existe → devolver el mismo
+            return existente.get();
+        }
+
+        // No existe → crear y guardar
         participante.setUsuario(usuario);
         participante.setSalaChat(sala);
 
         return participanteChatRepository.save(participante);
     }
+
 
     public void eliminarParticipante(Long idParticipante) {
         participanteChatRepository.deleteById(idParticipante);

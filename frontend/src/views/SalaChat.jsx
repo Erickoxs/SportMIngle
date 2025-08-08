@@ -14,15 +14,14 @@ const SalaChat = () => {
   const [mensajes, setMensajes] = useState([]);
   const [sala, setSala] = useState(null);
   const [cargando, setCargando] = useState(true);
+  const [stompClient, setStompClient] = useState(null);
 
   const token = localStorage.getItem('token');
   const decoded = decodeToken(token);
   const idUsuarioActual = decoded?.id;
 
-  // ✅ Cargar sala y mensajes al inicio
+  // 🔹 Cargar sala y mensajes iniciales
   useEffect(() => {
-    if (!idUsuarioActual) return;
-
     const cargarSalaYMensajes = async () => {
       try {
         const resSala = await api.get(`/api/salas/${idSala}`, {
@@ -40,84 +39,93 @@ const SalaChat = () => {
           null,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-      } catch (err) {
-        console.error('[ERROR] Fallo al cargar sala o mensajes:', err);
+      } catch (error) {
+        console.error('[ERROR] Cargando sala o mensajes:', error);
       } finally {
         setCargando(false);
       }
     };
 
-    cargarSalaYMensajes();
+    if (idUsuarioActual) {
+      cargarSalaYMensajes();
+    }
   }, [idSala, idUsuarioActual, token]);
 
-  // ✅ Conexión WebSocket
-  // ✅ Conexión WebSocket
-useEffect(() => {
-  if (!idUsuarioActual) return;
+  // 🔹 Conectar WebSocket
+  useEffect(() => {
+    if (!idUsuarioActual) return;
 
- const socket = new SockJS(`${import.meta.env.VITE_API_URL}/ws-chat`);
+    const socket = new SockJS(`${import.meta.env.VITE_API_URL}/ws-chat`);
+    const client = new Client({
+      webSocketFactory: () => socket,
+      reconnectDelay: 5000,
+      onConnect: () => {
+        console.log('[DEBUG] Conectado al WebSocket');
 
-  const stompClient = new Client({
-    webSocketFactory: () => socket,
-    reconnectDelay: 5000,
-    onConnect: () => {
-      console.log('[DEBUG] Conectado al WebSocket');
-      
-      stompClient.subscribe(`/topic/chat/${idSala}`, (mensaje) => {
-        const nuevoMensaje = JSON.parse(mensaje.body);
-        console.log('[DEBUG] Mensaje recibido vía WebSocket:', nuevoMensaje);
+        // Escuchar mensajes en la sala
+        client.subscribe(`/topic/chat/${idSala}`, (mensaje) => {
+          try {
+            const nuevoMensaje = JSON.parse(mensaje.body);
+            console.log('[DEBUG] Recibido:', nuevoMensaje);
 
-        if (nuevoMensaje.tipo === 'MENSAJE_ELIMINADO') {
-  setMensajes((prev) =>
-    prev.map((m) =>
-      m.idMensaje === nuevoMensaje.idMensaje
-        ? { ...m, eliminado: true }
-        : m
-    )
-  );
-} else {
-          setMensajes((prev) => [...prev, nuevoMensaje]);
-        }
+            if (nuevoMensaje.tipo === 'MENSAJE_ELIMINADO') {
+              setMensajes((prev) =>
+                prev.map((m) =>
+                  m.idMensaje === nuevoMensaje.idMensaje
+                    ? { ...m, eliminado: true }
+                    : m
+                )
+              );
+            } else {
+              setMensajes((prev) => [...prev, nuevoMensaje]);
+            }
+          } catch (err) {
+            console.error('[ERROR] Procesando mensaje WS:', err);
+          }
+        });
+      },
+      onStompError: (frame) => {
+        console.error('[ERROR] STOMP:', frame.headers['message']);
+      },
+    });
+
+    client.activate();
+    setStompClient(client);
+
+    return () => {
+      console.log('[DEBUG] Desconectando WebSocket');
+      client.deactivate();
+    };
+  }, [idSala, idUsuarioActual]);
+
+  // 🔹 Enviar mensaje por WS
+  const enviarMensaje = (contenido) => {
+    if (!contenido.trim()) return; // evitar mensajes vacíos
+    if (stompClient && stompClient.connected) {
+      stompClient.publish({
+        destination: `/app/chat/enviar/${idSala}`,
+        body: JSON.stringify({
+          idRemitente: idUsuarioActual,
+          contenido: contenido.trim(),
+        }),
       });
-    },
-    onStompError: (frame) => {
-      console.error('[ERROR] STOMP error:', frame.headers['message']);
-    }
-  });
-
-  stompClient.activate();
-
-  return () => {
-    console.log('[DEBUG] Desconectando WebSocket');
-    stompClient.deactivate();
-  };
-}, [idSala, idUsuarioActual]);
-
-
-  const enviarMensaje = async (contenido) => {
-    try {
-      const res = await api.post(
-        `/api/chat/enviar?idRemitente=${idUsuarioActual}&idSala=${idSala}`,
-        { contenido },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      console.log('[DEBUG] Mensaje enviado vía HTTP:', res.data);
-    } catch (err) {
-      console.error('[ERROR] Error al enviar mensaje:', err);
+      console.log('[DEBUG] Mensaje enviado:', contenido);
+    } else {
+      console.warn('[WARN] No hay conexión WebSocket activa');
     }
   };
 
-  if (!idUsuarioActual) return <p className="p-4 text-red-500">Token inválido o expirado.</p>;
-  if (cargando) return <p className="p-4">Cargando sala...</p>;
-  if (!sala) return <p className="p-4">No se encontró la sala.</p>;
+  if (!idUsuarioActual) return <p>Token inválido o expirado.</p>;
+  if (cargando) return <p>Cargando sala...</p>;
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+<div className="flex flex-col h-screen bg-gray-50">
       <ChatHeader nombreSala={sala.nombreSala} />
       <MessageList mensajes={mensajes} idUsuarioActual={idUsuarioActual} idSala={idSala}/>
       <MessageInput onEnviar={enviarMensaje} />
     </div>
-  );
+);
+
 };
 
 export default SalaChat;

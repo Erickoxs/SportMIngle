@@ -1,5 +1,18 @@
 import React from 'react';
 import { MapContainer as LeafletMap, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
+
+// Aquí defines y aplicas el ícono por defecto de Leaflet
+const defaultIcon = L.icon({
+  iconUrl: '/images/leaflet/marker-icon.png',
+  shadowUrl: '/images/leaflet/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+L.Marker.prototype.options.icon = defaultIcon;
 
 function MapContainer({ lat, lon, nombre }) {
   if (!lat || !lon) return null;

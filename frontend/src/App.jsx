@@ -12,11 +12,13 @@ import VistaInvitarJugador from "./views/VistaInvitarJugador";
 import VistaSolicitudes from "./views/VistasSolicitudes";
 import UnirseAlClub from "./components/UnirseAlClub";
 import PrivateRoute from "./components/PrivateRoute";
+import OAuth2Redirect from "./views/OAuth2Redirect";
 
 const App = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/oauth2/redirect" element={<OAuth2Redirect />} />
         {/* Públicas */}
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />

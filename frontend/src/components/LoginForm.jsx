@@ -17,19 +17,20 @@ const LoginForm = () => {
         passwordHash,
       });
 
-      console.log("Respuesta:", response.data);
       localStorage.setItem("token", response.data.token);
       navigate("/home");
     } catch (error) {
-      console.error("Error al iniciar sesión:", error);
-
-      // Mostrar mensaje de error claro
       if (error.response?.data?.mensaje) {
         setErrorMensaje(error.response.data.mensaje);
       } else {
         setErrorMensaje("Error al iniciar sesión. Verifica tus datos.");
       }
     }
+  };
+
+  const handleGoogleLogin = () => {
+    // Cambia la URL por la de tu backend local o de producción
+    window.location.href = `${import.meta.env.VITE_API_URL}/oauth2/authorization/google`;
   };
 
   return (
@@ -47,6 +48,7 @@ const LoginForm = () => {
         </div>
       )}
 
+      {/* Login con email */}
       <input
         type="email"
         placeholder="Correo electrónico"
@@ -71,6 +73,27 @@ const LoginForm = () => {
       >
         Iniciar Sesión
       </button>
+
+      {/* Separador */}
+      <div className="flex items-center gap-4 my-4">
+        <hr className="flex-1 border-gray-300" />
+        <span className="text-gray-500 text-sm">o</span>
+        <hr className="flex-1 border-gray-300" />
+      </div>
+
+      {/* Botón Google */}
+      <button
+  type="button"
+  onClick={handleGoogleLogin}
+  className="flex items-center justify-center gap-3 bg-white border border-gray-300 text-gray-700 py-3 rounded-lg hover:shadow-md transition-shadow"
+>
+  <img
+    src="https://www.svgrepo.com/show/355037/google.svg"
+    alt="Google"
+    className="w-5 h-5"
+  />
+  Iniciar sesión con Google
+</button>
 
       <p className="text-center mt-4 text-gray-600">
         ¿No tienes cuenta?{" "}

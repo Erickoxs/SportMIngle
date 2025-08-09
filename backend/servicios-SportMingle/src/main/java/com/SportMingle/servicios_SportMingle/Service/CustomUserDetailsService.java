@@ -21,12 +21,27 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+
+
         Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"));
+                .orElseThrow(() -> {
+                    System.err.println("[ERROR] Usuario no encontrado: " + email);
+                    return new UsernameNotFoundException("Usuario no encontrado");
+                });
+
+
+
+        String password = usuario.getPasswordHash();
+        if (password == null || password.isBlank()) {
+
+            password = "{noop}OAUTH2_USER";
+        }
+
+
 
         return User.builder()
                 .username(usuario.getEmail())
-                .password(usuario.getPasswordHash())  // debe estar cifrada con bcrypt
+                .password(password) // Usamos la variable segura, no el valor que podría ser null
                 .roles("USER")
                 .build();
     }

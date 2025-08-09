@@ -21,7 +21,7 @@ public class Usuario implements UserDetails {
     @Column(nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(name = "password_hash", nullable = false, length = 255)
+    @Column(name = "password_hash", nullable = true, length = 255)
     private String passwordHash;
 
     @Column(nullable = false, length = 100)
@@ -36,7 +36,7 @@ public class Usuario implements UserDetails {
     @Column(name = "foto_perfil", length = 255)
     private String fotoPerfil;
 
-    @Column(name = "numero_cedula", length = 255, nullable = false)
+    @Column(name = "numero_cedula", length = 255, nullable = true)
     private String numeroCedula;
 
     @Column(name = "deporte_favorito", length = 255, nullable = true)

@@ -31,6 +31,9 @@ public class SecurityConfig {
     @Autowired
     private JwtFilter jwtFilter;
 
+    @Autowired
+    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -71,14 +74,27 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/usuarios/login", "/api/usuarios/register", "/uploads/**", "/ws-chat/**").permitAll()
+                        .requestMatchers(
+                                "/api/usuarios/login",
+                                "/api/usuarios/register",
+                                "/uploads/**",
+                                "/ws-chat/**",
+                                "/oauth2/**", // necesario para Google
+                                "/login/oauth2/**", // necesario para Google
+                                "/api/usuarios/oauth2/success" // callback
+                        ).permitAll()
                         .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oAuth2LoginSuccessHandler) // <-- usamos el handler personalizado
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())); // ← ENLACE AQUÍ
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         return http.build();
     }
+
+
 
 }

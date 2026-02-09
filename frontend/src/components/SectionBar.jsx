@@ -11,7 +11,7 @@ const deportes = [
   // más deportes si quieres
 ];
 
-function SectionBar({ onChange }) {
+function SectionBar({ onChange, className }) {
   const [deporteSeleccionado, setDeporteSeleccionado] = useState(deportes[0].nombre);
 
   const seleccionarDeporte = (deporte) => {
@@ -21,7 +21,7 @@ function SectionBar({ onChange }) {
 
   return (
     <section
-      className="flex space-x-3 bg-white p-2 shadow-md overflow-x-auto overflow-y-visible whitespace-nowrap"
+      className={`flex md:flex-col space-x-3 md:space-x-0 md:space-y-4 bg-white p-2 md:pl-12 shadow-md overflow-x-auto md:overflow-y-auto whitespace-nowrap md:whitespace-normal ${className || ''}`}
       style={{ WebkitOverflowScrolling: 'touch' }} // para scroll suave en iOS
     >
       {deportes.map(({ nombre, icono }) => (

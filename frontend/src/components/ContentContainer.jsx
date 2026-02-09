@@ -63,10 +63,12 @@ function ContentContainer({ deporte, categoria }) {
   if (loading) return <p className="text-center text-gray-500">Cargando contenido...</p>;
 
   return (
-    <div ref={scrollRef} className="h-[400px] overflow-y-auto space-y-4 pr-2">
-      {contenido.map((item, i) => (
-        <TarjetaCategoria key={i} categoria={categoria} item={item} />
-      ))}
+    <div ref={scrollRef} className="h-[400px] md:h-[600px] overflow-y-auto pr-2">
+      <div className="space-y-4 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4">
+        {contenido.map((item, i) => (
+          <TarjetaCategoria key={i} categoria={categoria} item={item} />
+        ))}
+      </div>
     </div>
   );
 }

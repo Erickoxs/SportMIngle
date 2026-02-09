@@ -1,3 +1,10 @@
 backend/servicios-SportMingle/src/main/resources/application.properties
 frontend/.env
 backend/servicios-SportMingle/src/main/resources/accessKeys.txt
+frontend/.interface-design/system.md
+frontend/.gemini/skills/interface-design/references/validation.md
+frontend/.gemini/skills/interface-design/references/principles.md
+frontend/.gemini/skills/interface-design/references/example.md
+frontend/.gemini/skills/interface-design/SKILL.md
+frontend/.gemini/skills/brainstorming/SKILL.md
+.agents/skills/brainstorming/SKILL.md

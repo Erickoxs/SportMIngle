@@ -48,11 +48,11 @@ public class PartidoInformal {
 
     // Getters y Setters
 
-    public Long getIdPartidoInformal() {
+    public Long getIdPartido() {
         return idPartido;
     }
 
-    public void setIdPartidoInformal(Long idPartido) {
+    public void setIdPartido(Long idPartido) {
         this.idPartido = idPartido;
     }
 

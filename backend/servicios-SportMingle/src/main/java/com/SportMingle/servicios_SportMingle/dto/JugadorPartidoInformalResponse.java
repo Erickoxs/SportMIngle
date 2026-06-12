@@ -11,7 +11,7 @@ public class JugadorPartidoInformalResponse {
     public JugadorPartidoInformalResponse(JugadorPartidoInformal jugador) {
         this.id = jugador.getIdInscripcion();
         this.nombreJugador = jugador.getJugador().getNombre(); // Asegúrate de que jugador no sea null
-        this.idPartido = jugador.getPartidoInformal().getIdPartidoInformal();
+        this.idPartido = jugador.getPartidoInformal().getIdPartido();
     }
 
     // Getters

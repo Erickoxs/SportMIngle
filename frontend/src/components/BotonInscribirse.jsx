@@ -8,13 +8,20 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
 
   const handleInscribirse = async () => {
     const token = localStorage.getItem('token');
+    console.log("🔍 [DEBUG FRONT] Token recuperado de localStorage:", token ? "Presente (comienza por ey...)" : "❌ AUSENTE");
+
+    if (!token) {
+      alert('Debes estar logueado para inscribirte. No se encontró un token.');
+      return;
+    }
+
     const decoded = decodeToken(token);
+    console.log("🔍 [DEBUG FRONT] Token decodificado:", decoded);
     const idUsuario = decoded?.id;
+    console.log("🔍 [DEBUG FRONT] ID de usuario extraído del JWT:", idUsuario);
 
-   
-
-    if (!token || !idUsuario) {
-      alert('Debes estar logueado para inscribirte.');
+    if (!idUsuario) {
+      alert('Tu sesión no es válida o no contiene un ID de usuario.');
       return;
     }
 
@@ -22,42 +29,37 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
       let ruta = '';
       let payload = {};
 
+      console.log("🔍 [DEBUG FRONT] Ejecutando caso para categoría:", categoria);
+
       switch (categoria) {
-   case 'clubes':
-  ruta = `/api/solicitudes/solicitar?idUsuario=${idUsuario}&idClub=${idItem}`;
-  payload = null; // no se envía body, solo los params
-  break;
+        case 'clubes':
+          ruta = `/api/solicitudes/solicitar?idUsuario=${idUsuario}&idClub=${idItem}`;
+          payload = null;
+          break;
+
         case 'partidos':
-        
           ruta = '/api/jugadores';
           payload = {
-            jugador: { idUsuario },
-            partidoInformal: { idPartidoInformal: idItem }
+            jugador: { idUsuario: idUsuario }, // Mapeo explícito
+            partidoInformal: { idPartido: idItem }
           };
           break;
 
         case 'torneos':
-          
-
+          console.log("📡 [DEBUG FRONT] Buscando club para el organizador:", idUsuario);
           const clubRes = await api.get(`/api/clubes/organizador/${idUsuario}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
+            headers: { Authorization: `Bearer ${token}` }
           });
-
           const club = clubRes.data;
-
+          console.log("🔍 [DEBUG FRONT] Club devuelto por el servidor:", club);
 
           if (!club) {
             alert('No eres organizador de ningún club.');
-            console.warn('⚠️ No se encontró un club válido para el organizador');
             return;
           }
 
-        
           if (club.deporte !== deporteTorneo) {
             alert(`El club debe ser del mismo deporte que el torneo (${deporteTorneo}).`);
-            console.warn('❌ El deporte del club no coincide con el del torneo');
             return;
           }
 
@@ -67,38 +69,36 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
             clubes: { id: club.id },
             pagoRealizado: false
           };
-
           break;
 
         default:
           alert('Categoría no válida.');
-          console.error('❌ Categoría no reconocida:', categoria);
           return;
       }
 
-    
+      console.log("📡 [DEBUG FRONT] Enviando petición POST...");
+      console.log("-> URL de destino:", ruta);
+      console.log("-> Payload final:", JSON.stringify(payload));
 
       const res = await api.post(ruta, payload, {
         headers: {
-          Authorization: `Bearer ${token}`
+          'Authorization': `Bearer ${token}` // Aseguramos que la cabecera vaya limpia
         }
       });
 
-      console.log('✅ Inscripción exitosa:', res.data);
+      console.log('✅ Inscripción exitosa en el servidor:', res.data);
       alert('Inscripción exitosa.');
+
     } catch (error) {
-      console.error('❌ Error al inscribirse:', error);
+      console.error('❌ Error capturado en el bloque catch de Axios:', error);
 
       if (error.response) {
-        console.error('📡 Código de estado:', error.response.status);
-        console.error('📨 Respuesta del servidor:', error.response.data);
-        alert(`Error del servidor: ${error.response.data?.message || 'Intenta nuevamente.'}`);
+        console.error('📡 Estado HTTP devuelto:', error.response.status);
+        console.error('📨 Mensaje detallado del backend:', error.response.data);
       } else if (error.request) {
-        console.warn('⏳ No hubo respuesta del servidor:', error.request);
-        alert('No se recibió respuesta del servidor.');
+        console.warn('⏳ La petición se envió pero el servidor no respondió o la bloqueó (CORS/Redirect):', error.request);
       } else {
-        console.warn('⚠️ Error al preparar la solicitud:', error.message);
-        alert('Error inesperado al intentar inscribirse.');
+        console.warn('⚠️ Error de configuración de Axios:', error.message);
       }
     }
   };

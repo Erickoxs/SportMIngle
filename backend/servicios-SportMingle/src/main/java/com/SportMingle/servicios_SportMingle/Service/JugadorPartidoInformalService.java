@@ -4,6 +4,9 @@ import com.SportMingle.servicios_SportMingle.Model.PartidoInformal;
 import com.SportMingle.servicios_SportMingle.Model.Usuario;
 import com.SportMingle.servicios_SportMingle.Repository.JugadorPartidoInformalRepository;
 import com.SportMingle.servicios_SportMingle.dto.JugadorPartidoInformalResponse;
+import com.SportMingle.servicios_SportMingle.Repository.PartidoInformalRepository;
+import com.SportMingle.servicios_SportMingle.Repository.UsuarioRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +17,14 @@ import java.util.Optional;
 public class JugadorPartidoInformalService {
 
     private final JugadorPartidoInformalRepository jugadorPartidoInformalRepository;
+    private final PartidoInformalRepository partidoInformalRepository;
+    private final UsuarioRepository usuarioRepository;
 
     @Autowired
-    public JugadorPartidoInformalService(JugadorPartidoInformalRepository jugadorPartidoInformalRepository) {
+    public JugadorPartidoInformalService(JugadorPartidoInformalRepository jugadorPartidoInformalRepository, PartidoInformalRepository partidoInformalRepository, UsuarioRepository usuarioRepository) {
         this.jugadorPartidoInformalRepository = jugadorPartidoInformalRepository;
+        this.partidoInformalRepository = partidoInformalRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public List<JugadorPartidoInformal> getTodos() {
@@ -40,7 +47,26 @@ public class JugadorPartidoInformalService {
         return jugadorPartidoInformalRepository.findByJugador(jugador);
     }
 
+    @Transactional // 1. IMPORTANTE: Mantiene la sesión de Hibernate viva durante todo el método
     public JugadorPartidoInformal crear(JugadorPartidoInformal nuevoRegistro) {
+
+        // 2. Extraemos los IDs que el frontend mandó dentro de las estructuras internas
+        Long idPartido = nuevoRegistro.getPartidoInformal().getIdPartido();
+        Long idUsuario = nuevoRegistro.getJugador().getIdUsuario();
+
+        // 3. Vamos a Supabase a traer los registros reales y registrados
+        PartidoInformal partidoReal = partidoInformalRepository.findById(idPartido)
+                .orElseThrow(() -> new RuntimeException("Error: El partido con ID " + idPartido + " no existe."));
+
+        Usuario usuarioReal = usuarioRepository.findById(idUsuario)
+                .orElseThrow(() -> new RuntimeException("Error: El usuario con ID " + idUsuario + " no existe."));
+
+        // 4. PLANCHAMOS los objetos reales sobre el registro.
+        // Esto borra las instancias transitorias que Jackson creó en el aire y le da a Hibernate lo que quiere.
+        nuevoRegistro.setPartidoInformal(partidoReal);
+        nuevoRegistro.setJugador(usuarioReal);
+
+        // 5. Ahora sí, guardamos limpiamente sin que intente duplicar usuarios o partidos
         return jugadorPartidoInformalRepository.save(nuevoRegistro);
     }
 

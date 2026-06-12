@@ -80,7 +80,7 @@ public class PartidoInformalController {
     // Actualizar un partido informal existente
     @PutMapping("/{id}")
     public ResponseEntity<PartidoInformal> actualizarPartido(@PathVariable Long id, @RequestBody PartidoInformal partido) {
-        if (!id.equals(partido.getIdPartidoInformal())) {
+        if (!id.equals(partido.getIdPartido())) {
             return ResponseEntity.badRequest().build();
         }
         PartidoInformal actualizado = partidoInformalService.actualizarPartido(partido);

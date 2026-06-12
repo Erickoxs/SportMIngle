@@ -60,7 +60,7 @@ public class PartidoInformalService {
     }
 
     public PartidoInformal actualizarPartido(PartidoInformal partido) {
-        if (partido.getIdPartidoInformal() == null) {
+        if (partido.getIdPartido() == null) {
             throw new IllegalArgumentException("El ID del partido informal es requerido para actualizar");
         }
         return partidoInformalRepository.save(partido);

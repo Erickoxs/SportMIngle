@@ -15,7 +15,7 @@ public class PartidoInformalResponse {
     private String deporte;
 
     public PartidoInformalResponse(PartidoInformal partido) {
-        this.id = partido.getIdPartidoInformal();
+        this.id = partido.getIdPartido();
         this.descripcion = partido.getDescripcion();
         this.fechaHora = partido.getFechaHora();
         this.lat = partido.getUbicacion().getY(); // latitud

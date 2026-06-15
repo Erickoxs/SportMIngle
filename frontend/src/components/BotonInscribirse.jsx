@@ -8,7 +8,7 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
 
   const handleInscribirse = async () => {
     const token = localStorage.getItem('token');
-    console.log("🔍 [DEBUG FRONT] Token recuperado de localStorage:", token ? "Presente (comienza por ey...)" : "❌ AUSENTE");
+    
 
     if (!token) {
       alert('Debes estar logueado para inscribirte. No se encontró un token.');
@@ -16,9 +16,7 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
     }
 
     const decoded = decodeToken(token);
-    console.log("🔍 [DEBUG FRONT] Token decodificado:", decoded);
     const idUsuario = decoded?.id;
-    console.log("🔍 [DEBUG FRONT] ID de usuario extraído del JWT:", idUsuario);
 
     if (!idUsuario) {
       alert('Tu sesión no es válida o no contiene un ID de usuario.');
@@ -28,8 +26,6 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
     try {
       let ruta = '';
       let payload = {};
-
-      console.log("🔍 [DEBUG FRONT] Ejecutando caso para categoría:", categoria);
 
       switch (categoria) {
         case 'clubes':
@@ -46,12 +42,10 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
           break;
 
         case 'torneos':
-          console.log("📡 [DEBUG FRONT] Buscando club para el organizador:", idUsuario);
           const clubRes = await api.get(`/api/clubes/organizador/${idUsuario}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           const club = clubRes.data;
-          console.log("🔍 [DEBUG FRONT] Club devuelto por el servidor:", club);
 
           if (!club) {
             alert('No eres organizador de ningún club.');
@@ -76,30 +70,16 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
           return;
       }
 
-      console.log("📡 [DEBUG FRONT] Enviando petición POST...");
-      console.log("-> URL de destino:", ruta);
-      console.log("-> Payload final:", JSON.stringify(payload));
-
       const res = await api.post(ruta, payload, {
         headers: {
           'Authorization': `Bearer ${token}` // Aseguramos que la cabecera vaya limpia
         }
       });
 
-      console.log('✅ Inscripción exitosa en el servidor:', res.data);
       alert('Inscripción exitosa.');
 
     } catch (error) {
-      console.error('❌ Error capturado en el bloque catch de Axios:', error);
-
-      if (error.response) {
-        console.error('📡 Estado HTTP devuelto:', error.response.status);
-        console.error('📨 Mensaje detallado del backend:', error.response.data);
-      } else if (error.request) {
-        console.warn('⏳ La petición se envió pero el servidor no respondió o la bloqueó (CORS/Redirect):', error.request);
-      } else {
-        console.warn('⚠️ Error de configuración de Axios:', error.message);
-      }
+      console.error('❌ Error al inscribirse:', error.message);
     }
   };
 

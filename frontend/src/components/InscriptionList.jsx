@@ -24,11 +24,8 @@ const ListaInscripciones = ({ categoria, id }) => {
             url = `/api/miembros/club/${id}`;
             break;
           default:
-            console.warn('❌ Categoría no reconocida:', categoria);
             return;
         }
-
-        console.log('🔍 Solicitando inscripciones desde:', url);
 
         const res = await api.get(url, {
           headers: {
@@ -37,16 +34,14 @@ const ListaInscripciones = ({ categoria, id }) => {
         });
 
         const data = res.data;
-        console.log('📦 Respuesta del backend:', data);
 
         if (Array.isArray(data)) {
           setInscripciones(data);
         } else {
-          console.warn('⚠️ La respuesta no es un arreglo. Tipo:', typeof data);
           setInscripciones([]);
         }
       } catch (err) {
-        console.error('❌ Error al cargar inscripciones:', err);
+        console.error('❌ Error al cargar inscripciones:', err.message);
         setError('No se pudieron cargar las inscripciones.');
       } finally {
         setCargando(false);

@@ -14,13 +14,8 @@ const MessageList = ({ mensajes, idUsuarioActual, idSala }) => {
   const token = localStorage.getItem('token');
 
   const handleEliminarMensaje = async (idMensaje) => {
-    console.log('--- ELIMINAR MENSAJE ---');
-    console.log('Token:', token);
-    console.log('idMensaje:', idMensaje);
-    console.log('idUsuarioActual:', idUsuarioActual);
-
     try {
-      const response = await api.post('/api/chat/eliminar', null, {
+      await api.post('/api/chat/eliminar', null, {
         params: {
           idMensaje,
           idUsuario: idUsuarioActual,
@@ -31,19 +26,8 @@ const MessageList = ({ mensajes, idUsuarioActual, idSala }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      console.log('Respuesta del backend:', response.data);
     } catch (error) {
-      console.error('Error al eliminar el mensaje:');
-      if (error.response) {
-        console.error('Status:', error.response.status);
-        console.error('Data:', error.response.data);
-        console.error('Headers:', error.response.headers);
-      } else if (error.request) {
-        console.error('No se recibió respuesta del servidor:', error.request);
-      } else {
-        console.error('Error al configurar la petición:', error.message);
-      }
+      console.error('Error al eliminar el mensaje:', error.message);
     }
   };
 

@@ -37,11 +37,10 @@ const RegisterForm = () => {
         passwordHash: formData.password, // o passwordHash si es lo que espera tu backend
       });
 
-      console.log("Registro exitoso:", response.data);
       navigate("/");
       // Aquí podrías redirigir o limpiar el formulario
     } catch (error) {
-      console.error("Error en el registro:", error);
+      console.error("Error en el registro:", error.message);
       alert("Error al registrar usuario");
     }
   };

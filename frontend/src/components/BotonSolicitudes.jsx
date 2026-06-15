@@ -6,7 +6,6 @@ const BotonSolicitudes = ({ idClub }) => {
 
   const handleClick = () => {
     if (!idClub) {
-      console.warn('⚠️ idClub no disponible');
       return;
     }
     navigate(`/solicitudes/${idClub}`);

@@ -40,7 +40,7 @@ const SalaChat = () => {
           { headers: { Authorization: `Bearer ${token}` } }
         );
       } catch (error) {
-        console.error('[ERROR] Cargando sala o mensajes:', error);
+        console.error('[ERROR] Cargando sala o mensajes:', error.message);
       } finally {
         setCargando(false);
       }
@@ -60,13 +60,13 @@ const SalaChat = () => {
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
       onConnect: () => {
-        console.log('[DEBUG] Conectado al WebSocket');
+
 
         // Escuchar mensajes en la sala
         client.subscribe(`/topic/chat/${idSala}`, (mensaje) => {
           try {
-            const nuevoMensaje = JSON.parse(mensaje.body);
-            console.log('[DEBUG] Recibido:', nuevoMensaje);
+             const nuevoMensaje = JSON.parse(mensaje.body);
+
 
             if (nuevoMensaje.tipo === 'MENSAJE_ELIMINADO') {
               setMensajes((prev) =>
@@ -80,7 +80,7 @@ const SalaChat = () => {
               setMensajes((prev) => [...prev, nuevoMensaje]);
             }
           } catch (err) {
-            console.error('[ERROR] Procesando mensaje WS:', err);
+            console.error('[ERROR] Procesando mensaje WS:', err.message);
           }
         });
       },
@@ -92,8 +92,7 @@ const SalaChat = () => {
     client.activate();
     setStompClient(client);
 
-    return () => {
-      console.log('[DEBUG] Desconectando WebSocket');
+     return () => {
       client.deactivate();
     };
   }, [idSala, idUsuarioActual]);
@@ -109,9 +108,6 @@ const SalaChat = () => {
           contenido: contenido.trim(),
         }),
       });
-      console.log('[DEBUG] Mensaje enviado:', contenido);
-    } else {
-      console.warn('[WARN] No hay conexión WebSocket activa');
     }
   };
 

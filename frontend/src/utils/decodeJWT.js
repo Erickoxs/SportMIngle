@@ -10,7 +10,7 @@ export function decodeToken(token) {
     );
     return JSON.parse(jsonPayload);
   } catch (error) {
-    console.error('Error al decodificar el token:', error);
+    console.error('Error al decodificar el token:', error.message);
     return null;
   }
 }

@@ -43,7 +43,7 @@ function FormularioPartido() {
       const decoded = jwtDecode(token);
       userId = decoded.id;
     } catch (err) {
-      console.error('Error decodificando el token:', err);
+      console.error('Error decodificando el token:', err.message);
       alert('Token inválido.');
       return;
     }
@@ -67,16 +67,14 @@ function FormularioPartido() {
         },
       });
 
-      console.log("LatLon antes de enviar:", latLon);
       setMensaje('✅ Partido creado con éxito');
-      console.log('Respuesta del servidor:', response.data);
 
       setTimeout(() => {
         navigate('/home');
       }, 1500);
     } catch (error) {
       setMensaje('❌ Error al crear el partido');
-      console.error('Error al enviar:', error);
+      console.error('Error al enviar:', error.message);
     }
   };
 

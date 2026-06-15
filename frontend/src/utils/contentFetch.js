@@ -2,7 +2,6 @@ import axios from 'axios';
 
 export async function obtenerContenidoPorCategoriaYDeporte(categoria, deporte, lat, lon) {
   const token = localStorage.getItem('token');
-  console.log("Token enviado:", token);
 
   const baseURL = import.meta.env.VITE_API_URL; // Usa variable de entorno
   const url = `${baseURL}/api/${categoria}/cercanos`;
@@ -26,7 +25,7 @@ export async function obtenerContenidoPorCategoriaYDeporte(categoria, deporte, l
     return response.data;
 
   } catch (error) {
-    console.error('Error al obtener el contenido:', error.response || error);
+    console.error('Error al obtener el contenido:', error.message);
     return [];
   }
 }

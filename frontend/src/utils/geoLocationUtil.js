@@ -12,7 +12,7 @@ export async function obtenerDireccion(lat, lon) {
     const data = await response.json();
     return data.display_name; // Aquí viene la dirección completa en texto
   } catch (error) {
-    console.error('No se pudo obtener la dirección:', error);
+    console.error('No se pudo obtener la dirección:', error.message);
     return 'Dirección no disponible';
   }
 }

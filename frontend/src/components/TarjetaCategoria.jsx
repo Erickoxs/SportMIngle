@@ -38,8 +38,6 @@ function TarjetaCategoria({ categoria, item }) {
 
       {categoria === 'torneos' && (
         <>
-          {console.log('🔗 URL imagen torneo:', item.imagenTorneo)}
-
           <img
   src={
     item.imagenTorneo
@@ -57,8 +55,6 @@ function TarjetaCategoria({ categoria, item }) {
 
       {categoria === 'clubes' && (
         <>
-          {console.log('🔗 URL logo club:', item.logoUrl)}
-
          <img
   src={
     item.logoUrl

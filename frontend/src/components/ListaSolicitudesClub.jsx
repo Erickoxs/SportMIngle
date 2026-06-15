@@ -8,26 +8,22 @@ const ListaSolicitudesClub = ({ idClub }) => {
   const fetchSolicitudes = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
-      console.warn('⚠️ No se encontró token en localStorage');
       setLoading(false);
       return;
     }
 
     try {
-      console.log(`📡 Obteniendo solicitudes del club ID: ${idClub}`);
       const res = await api.get(`/api/solicitudes/club/${idClub}/pendientes`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (Array.isArray(res.data)) {
-        console.log(`✅ Solicitudes obtenidas: ${res.data.length}`);
         setSolicitudes(res.data);
       } else {
-        console.warn('⚠️ Respuesta inesperada:', res.data);
         setSolicitudes([]);
       }
     } catch (error) {
-      console.error('❌ Error al obtener solicitudes:', error);
+      console.error('❌ Error al obtener solicitudes:', error.message);
     } finally {
       setLoading(false);
     }
@@ -36,19 +32,16 @@ const ListaSolicitudesClub = ({ idClub }) => {
   const manejarAccion = async (idSolicitud, accion) => {
     const token = localStorage.getItem('token');
     if (!token) {
-      console.warn('⚠️ No se encontró token para la acción');
       return;
     }
 
     try {
-      console.log(`🔁 Enviando acción "${accion}" para solicitud ID: ${idSolicitud}`);
       await api.put(`/api/solicitudes/${idSolicitud}/${accion}`, null, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(`✅ Acción "${accion}" completada`);
       fetchSolicitudes();
     } catch (error) {
-      console.error(`❌ Error al ${accion} la solicitud:`, error);
+      console.error(`❌ Error al ${accion} la solicitud:`, error.message);
     }
   };
 

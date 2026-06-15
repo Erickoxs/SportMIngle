@@ -33,10 +33,9 @@ function Details() {
         });
 
         setItem(res.data);
-        console.log(res.data);
       } catch (err) {
         setError('No se pudo cargar el contenido.');
-        console.error(err);
+        console.error(err.message);
       } finally {
         setLoading(false);
       }

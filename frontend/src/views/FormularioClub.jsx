@@ -60,7 +60,7 @@ function FormularioClub() {
       setMensaje('✅ Club creado con éxito');
       setTimeout(() => navigate('/home'), 1500);
     } catch (err) {
-      console.error(err);
+      console.error(err.message);
       setMensaje('❌ Error al crear el club');
     }
   };

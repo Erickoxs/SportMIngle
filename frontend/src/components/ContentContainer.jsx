@@ -19,7 +19,7 @@ function ContentContainer({ deporte, categoria }) {
         setUbicacion(ubicacionObj);
       },
       (err) => {
-        console.error('No se pudo obtener la ubicación', err);
+        console.error('No se pudo obtener la ubicación', err.message);
         setContenido([{ error: 'No se pudo acceder a tu ubicación.' }]);
         setLoading(false);
       }

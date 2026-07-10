@@ -6,7 +6,7 @@ SportMingle es una plataforma full-stack diseñada para solucionar la falta de c
 
 ## 🎯 Características Principales
 
-*   **Partidos Libres y Casuales (Cualquier Usuario):** No necesitas pertenecer a un club. Cualquier jugador puede crear un encuentro, definir el deporte, la hora y el lugar para que otros deportistas de la comunidad se unan libremente.
+*   **Partidos Libres y Casuales:** No necesitas pertenecer a un club. Cualquier jugador puede crear un encuentro, definir el deporte, la hora y el lugar para que otros deportistas de la comunidad se unan libremente.
 *   **Plataforma Multideporte:** Diseñada para adaptarse a diferentes disciplinas (baloncesto, fútbol, etc.), permitiendo filtrar las búsquedas según el deporte de interés del usuario.
 *   **Geolocalización Inteligente (Radio de 20 KM):** El núcleo de la aplicación filtra dinámicamente partidos libres, clubes y torneos basándose en la ubicación en tiempo real del usuario, limitando el contenido a un rango de 20 km a la redonda para garantizar la relevancia local.
 *   **Descubrimiento y Visibilidad de Clubes:** Espacio dedicado para que los clubes deportivos locales (que suelen carecer de plataformas de difusión) puedan darse a conocer y publicar sus actividades y torneos.
@@ -22,18 +22,18 @@ SportMingle es una plataforma full-stack diseñada para solucionar la falta de c
 ### Backend
 *   **Java & Spring Boot:** Framework principal para la construcción de la API REST robusta y escalable.
 *   **Spring Security & OAuth2:** Implementación de autenticación segura y control de accesos para usuarios y administradores de clubes.
-*   **PostgreSQL (vía Supabase):** Base de datos relacional en producción para garantizar la persistencia e integridad de los datos.
+*   **PostgreSQL:** Base de datos relacional en producción para garantizar la persistencia e integridad de los datos.
 
 ### Frontend
 *   **React:** Biblioteca principal para una interfaz de usuario dinámica, fluida y reactiva.
 
 ---
 
-## 🚀 Estado del Proyecto & Próximos Pasos (Roadmap)
+## 🚀 Estado del Proyecto & Próximos Pasos 
 
-El proyecto cuenta actualmente con su arquitectura core completamente funcional (Backend, Frontend y Base de Datos en la nube).
+El proyecto cuenta actualmente con su arquitectura core completamente funcional.
 
-*   [x] Configuración de arquitectura Base de Datos en producción (Supabase).
+*   [x] Configuración de arquitectura Base de Datos en producción.
 *   [x] Sistema de autenticación seguro.
 *   [x] Módulo de geolocalización, emparejamiento multideporte y chat en tiempo real.
 *   [ ] **En desarrollo:** Optimización y despliegue final del módulo de Torneos y Competencias locales.

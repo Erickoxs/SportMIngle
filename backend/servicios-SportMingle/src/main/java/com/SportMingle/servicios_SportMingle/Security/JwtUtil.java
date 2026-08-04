@@ -25,6 +25,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setSubject(usuario.getEmail())
                 .claim("id", usuario.getIdUsuario()) // <-- Aquí agregas el ID al token
+                .claim("nombre", usuario.getNombre()) // <-- Nombre del usuario
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)

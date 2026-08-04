@@ -5,6 +5,15 @@ import BackArrow from '../components/BackArrow';
 import api from '../utils/api';
 import MapaSelector from '../components/MapSelector';
 
+const deportes = [
+  { id_deporte: 1, nombre: "Fútbol" },
+  { id_deporte: 2, nombre: "Baloncesto" },
+  { id_deporte: 3, nombre: "Tenis" },
+  { id_deporte: 4, nombre: "Voleibol" },
+  { id_deporte: 5, nombre: "Béisbol" },
+  { id_deporte: 6, nombre: "Natación" }
+];
+
 function FormularioTorneo() {
   const navigate = useNavigate();
 
@@ -123,15 +132,21 @@ function FormularioTorneo() {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          ID del Deporte
+          Deporte
         </label>
-        <input
-          type="text"
+        <select
           value={idDeporte}
           onChange={(e) => setIdDeporte(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-[#009b3a]"
           required
-        />
+        >
+          <option value="" disabled>Selecciona un deporte</option>
+          {deportes.map((deporte) => (
+            <option key={deporte.id_deporte} value={deporte.id_deporte}>
+              {deporte.nombre}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="grid grid-cols-2 gap-4">

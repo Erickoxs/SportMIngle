@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { formatearFechaHora, formatearFecha } from '../utils/format';
 
 // Importa imágenes aleatorias para partidos informales
 import img1 from '../assets/informal1.jfif';
@@ -32,7 +33,7 @@ function TarjetaCategoria({ categoria, item }) {
           />
           <h3 className="text-lg font-semibold text-gray-800">{item.nombre}</h3>
           <p className="text-sm text-gray-600">Nivel: {item.nivelRequerido}</p>
-          <p className="text-sm text-gray-600">Hora: {item.fechaHora}</p>
+          <p className="text-sm text-gray-600">Hora: {formatearFechaHora(item.fechaHora)}</p>
         </>
       )}
 
@@ -49,7 +50,7 @@ function TarjetaCategoria({ categoria, item }) {
 />
           <h3 className="text-lg font-semibold text-gray-800">{item.nombre}</h3>
           <p className="text-sm text-gray-600">Costo de inscripción: ${item.costoInscripcion}</p>
-          <p className="text-sm text-gray-600">Inicio: {item.fechaInicio}</p>
+          <p className="text-sm text-gray-600">Inicio: {formatearFecha(item.fechaInicio)}</p>
         </>
       )}
 

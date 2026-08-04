@@ -13,6 +13,15 @@ const niveles = [
   'AVANZADO',
 ];
 
+const deportes = [
+  { id_deporte: 1, nombre: "Fútbol" },
+  { id_deporte: 2, nombre: "Baloncesto" },
+  { id_deporte: 3, nombre: "Tenis" },
+  { id_deporte: 4, nombre: "Voleibol" },
+  { id_deporte: 5, nombre: "Béisbol" },
+  { id_deporte: 6, nombre: "Natación" }
+];
+
 function FormularioPartido() {
   const [idDeporte, setDeporteId] = useState('');
   const [fechaHora, setFechaHora] = useState('');
@@ -49,7 +58,7 @@ function FormularioPartido() {
     }
 
     const nuevoPartido = {
-  idDeporte,
+  idDeporte: idDeporte ? parseInt(idDeporte) : null,
   fechaHora,
   lat: latLon.lat,
   lon: latLon.lon,
@@ -96,15 +105,21 @@ function FormularioPartido() {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
-          ID del Deporte
+          Deporte
         </label>
-        <input
-          type="text"
+        <select
           value={idDeporte}
           onChange={(e) => setDeporteId(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-[#009b3a]"
           required
-        />
+        >
+          <option value="" disabled>Selecciona un deporte</option>
+          {deportes.map((deporte) => (
+            <option key={deporte.id_deporte} value={deporte.id_deporte}>
+              {deporte.nombre}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>

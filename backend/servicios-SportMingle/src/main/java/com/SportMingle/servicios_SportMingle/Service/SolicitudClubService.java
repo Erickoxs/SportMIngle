@@ -8,6 +8,8 @@ import com.SportMingle.servicios_SportMingle.Repository.MiembroRepository;
 import com.SportMingle.servicios_SportMingle.Repository.SolicitudClubRepository;
 import com.SportMingle.servicios_SportMingle.dto.ClubResponse;
 import com.SportMingle.servicios_SportMingle.dto.SolicitudClubDTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,7 +27,16 @@ public class SolicitudClubService {
     }
 
     public void solicitarIngreso(Long idUsuario, Long idClub) {
-        // validaciones
+        // Validar si el jugador ya pertenece a este club
+        if (miembroRepo.existsByDeportistaIdUsuarioAndClubId(idUsuario, idClub)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ya estás inscrito en este club.");
+        }
+
+        // Validar si ya cuenta con una solicitud pendiente para unirse a este club
+        if (repo.existsByUsuario_IdUsuarioAndClub_IdAndEstado(idUsuario, idClub, SolicitudClub.EstadoSolicitud.PENDIENTE)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ya tienes una solicitud pendiente para unirte a este club.");
+        }
+
         SolicitudClub solicitud = new SolicitudClub();
 
         Usuario usuario = new Usuario();

@@ -18,6 +18,9 @@ public interface MiembroRepository extends JpaRepository<MiembroClub, Long> {
     // Buscar por club y rol (por ejemplo, para obtener al capitán)
     List<MiembroClub> findByClubIdAndRol(Long idClub, MiembroClub.Rol rol);
 
+    // Buscar si un usuario es miembro de un club
+    boolean existsByDeportistaIdUsuarioAndClubId(Long idUsuario, Long idClub);
+
     // Buscar si un usuario es miembro activo de un club
     boolean existsByDeportistaIdUsuarioAndClubIdAndActivoTrue(Long idUsuario, Long idClub);
 

@@ -26,8 +26,7 @@ public interface ClubesRepository extends JpaRepository<Clubes, Long> {
             @Param("distancia") double distanciaEnMetros,
             @Param("deporte") String deporte
     );
-    @Query("SELECT c FROM Clubes c JOIN MiembroClub mc ON mc.club.id = c.id " +
-            "WHERE mc.deportista.id = :idOrganizador AND mc.activo = true")
+    @Query("SELECT c FROM Clubes c WHERE c.administrador.idUsuario = :idOrganizador")
     Optional<Clubes> obtenerClubPorOrganizador(@Param("idOrganizador") Long idOrganizador);
 
 

@@ -50,23 +50,32 @@ public class JugadorPartidoInformalService {
     @Transactional // 1. IMPORTANTE: Mantiene la sesión de Hibernate viva durante todo el método
     public JugadorPartidoInformal crear(JugadorPartidoInformal nuevoRegistro) {
 
+        if (nuevoRegistro.getPartidoInformal() == null || nuevoRegistro.getJugador() == null) {
+            throw new RuntimeException("Error: Se debe proporcionar tanto el partido como el jugador.");
+        }
+
         // 2. Extraemos los IDs que el frontend mandó dentro de las estructuras internas
         Long idPartido = nuevoRegistro.getPartidoInformal().getIdPartido();
         Long idUsuario = nuevoRegistro.getJugador().getIdUsuario();
 
-        // 3. Vamos a Supabase a traer los registros reales y registrados
+        // 3. Validar si el jugador ya está inscrito en este partido
+        if (jugadorPartidoInformalRepository.existsByPartidoInformal_IdPartidoAndJugador_IdUsuario(idPartido, idUsuario)) {
+            throw new RuntimeException("Error: El jugador ya está asociado a este partido.");
+        }
+
+        // 4. Vamos a Supabase a traer los registros reales y registrados
         PartidoInformal partidoReal = partidoInformalRepository.findById(idPartido)
                 .orElseThrow(() -> new RuntimeException("Error: El partido con ID " + idPartido + " no existe."));
 
         Usuario usuarioReal = usuarioRepository.findById(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Error: El usuario con ID " + idUsuario + " no existe."));
 
-        // 4. PLANCHAMOS los objetos reales sobre el registro.
+        // 5. PLANCHAMOS los objetos reales sobre el registro.
         // Esto borra las instancias transitorias que Jackson creó en el aire y le da a Hibernate lo que quiere.
         nuevoRegistro.setPartidoInformal(partidoReal);
         nuevoRegistro.setJugador(usuarioReal);
 
-        // 5. Ahora sí, guardamos limpiamente sin que intente duplicar usuarios o partidos
+        // 6. Ahora sí, guardamos limpiamente sin que intente duplicar usuarios o partidos
         return jugadorPartidoInformalRepository.save(nuevoRegistro);
     }
 

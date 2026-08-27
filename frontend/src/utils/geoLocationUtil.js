@@ -1,57 +1,96 @@
 // utils/geolocationUtils.js
+import api from './api';
+
+// Cache en memoria para evitar llamadas repetidas a las mismas coordenadas
+const cacheDirecciones = new Map();
+
 export async function obtenerDireccion(lat, lon) {
-  try {
-    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`, {
-      headers: {
-        'User-Agent': 'SportMingle/1.0 (tu-email@example.com)',
-      }
-    });
+  if (!lat || !lon) return 'Dirección no disponible';
 
-    if (!response.ok) throw new Error('Error al obtener la dirección');
-
-    const data = await response.json();
-    const address = data.address || {};
-    const parts = [];
-
-    // 1. Nombre del sitio / calle y número
-    const place = address.amenity || address.building || address.shop || address.office || address.tourism || address.industrial || address.highway || '';
-    const houseNumber = address.house_number || '';
-    const road = address.road || '';
-
-    let street = road;
-    if (houseNumber) {
-      street = `${road} ${houseNumber}`;
-    }
-    if (place) {
-      street = place + (street ? `, ${street}` : '');
-    }
-    if (street) parts.push(street);
-
-    // 2. Barrio / Comuna / Suburbio
-    const neighborhood = address.neighbourhood || address.suburb || address.quarter || address.hamlet || '';
-    if (neighborhood) parts.push(neighborhood);
-
-    // 3. Municipio / Ciudad / Pueblo
-    const city = address.city || address.town || address.village || address.municipality || address.county || '';
-    if (city) parts.push(city);
-
-    // Unir las partes con coma. Si no hay nada, usar display_name recortado
-    let shortAddress = parts.join(', ');
-
-    if (!shortAddress && data.display_name) {
-      const allParts = data.display_name.split(',').map(p => p.trim());
-      if (allParts.length > 3) {
-        // Omitir las últimas 3 partes (habitualmente departamento, código postal, país)
-        shortAddress = allParts.slice(0, -3).join(', ');
-      } else {
-        shortAddress = data.display_name;
-      }
-    }
-
-    return shortAddress || 'Dirección no disponible';
-  } catch (error) {
-    console.error('No se pudo obtener la dirección:', error.message);
-    return 'Dirección no disponible';
+  const cacheKey = `${Number(lat).toFixed(4)},${Number(lon).toFixed(4)}`;
+  if (cacheDirecciones.has(cacheKey)) {
+    return cacheDirecciones.get(cacheKey);
   }
+
+  try {
+    // Consultar a nuestro propio backend (Spring Boot proxy) que a su vez consulta Nominatim con User-Agent válido
+    const res = await api.get(`/api/geocoding/reverse?lat=${lat}&lon=${lon}`);
+    const data = res.data;
+
+    if (data) {
+      // 1. Formato OpenStreetMap / Nominatim (Dirección exacta con calle, número, barrio)
+      if (data.address) {
+        const address = data.address;
+        const parts = [];
+
+        // Lugar de interés (cancha, centro deportivo, parque) y/o Calle con Número
+        const place = address.amenity || address.building || address.shop || address.leisure || address.tourism || address.office || '';
+        const road = address.road || address.pedestrian || address.highway || '';
+        const houseNumber = address.house_number || '';
+
+        let street = road;
+        if (road && houseNumber) {
+          street = `${road} #${houseNumber}`;
+        }
+
+        let via = '';
+        if (place && street) {
+          via = `${place} (${street})`;
+        } else {
+          via = place || street;
+        }
+        if (via) parts.push(via);
+
+        // Barrio / Suburbio
+        const barrio = address.neighbourhood || address.suburb || address.quarter || address.hamlet || '';
+        if (barrio) parts.push(barrio);
+
+        // Ciudad / Municipio
+        const ciudad = address.city || address.town || address.village || address.municipality || '';
+        if (ciudad) parts.push(ciudad);
+
+        let direccionExacta = parts.join(', ');
+
+        if (!direccionExacta && data.display_name) {
+          const allParts = data.display_name.split(',').map(p => p.trim());
+          direccionExacta = allParts.slice(0, Math.max(1, allParts.length - 2)).join(', ');
+        }
+
+        if (direccionExacta) {
+          cacheDirecciones.set(cacheKey, direccionExacta);
+          return direccionExacta;
+        }
+      }
+
+      // 2. Formato BigDataCloud (Respaldo en caso de que Nominatim sea limitado)
+      if (data.locality || data.city) {
+        const parts = [];
+        const barrio = data.locality || '';
+        const ciudad = data.city || '';
+        const depto = data.principalSubdivision || '';
+
+        if (barrio) parts.push(barrio);
+        if (ciudad && ciudad !== barrio) parts.push(ciudad);
+        if (depto && depto !== ciudad) parts.push(depto);
+
+        const direccionRespaldo = parts.join(', ') || data.localityInfo?.informational?.[0]?.name;
+        if (direccionRespaldo) {
+          cacheDirecciones.set(cacheKey, direccionRespaldo);
+          return direccionRespaldo;
+        }
+      }
+
+      if (typeof data.display_name === 'string') {
+        cacheDirecciones.set(cacheKey, data.display_name);
+        return data.display_name;
+      }
+    }
+  } catch (error) {
+    console.warn('⚠️ No se pudo obtener la dirección desde el backend:', error.message);
+  }
+
+  return 'Dirección no disponible';
 }
+
+
 

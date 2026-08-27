@@ -17,8 +17,6 @@ public interface JugadorPartidoInformalRepository extends JpaRepository<JugadorP
 
     List<JugadorPartidoInformal> findByPartidoInformal_IdPartido(Long idPartido);
 
-
-
-
+    boolean existsByPartidoInformal_IdPartidoAndJugador_IdUsuario(Long idPartido, Long idUsuario);
 
 }

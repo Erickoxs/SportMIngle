@@ -8,7 +8,7 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
 
   const handleInscribirse = async () => {
     const token = localStorage.getItem('token');
-    
+
 
     if (!token) {
       alert('Debes estar logueado para inscribirte. No se encontró un token.');
@@ -76,10 +76,21 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
         }
       });
 
-      alert('Inscripción exitosa.');
+      if (categoria === 'clubes') {
+        alert('Solicitud exitosa.');
+      } else {
+        alert('Inscripción exitosa.');
+      }
 
     } catch (error) {
-      console.error('❌ Error al inscribirse:', error.message);
+      console.error('❌ Error al inscribirse:', error);
+      const mensajeServer = error.response?.data?.reason || error.response?.data?.message || (typeof error.response?.data === 'string' ? error.response?.data : null);
+
+      if (mensajeServer) {
+        alert(mensajeServer);
+      } else {
+        alert(categoria === 'clubes' ? 'No se pudo enviar la solicitud.' : 'No se pudo completar la inscripción.');
+      }
     }
   };
 
@@ -95,7 +106,7 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
         onMouseOver={(e) => (e.target.style.backgroundColor = '#007d2f')}
         onMouseOut={(e) => (e.target.style.backgroundColor = '#009b3a')}
       >
-        Inscribirse
+        {categoria === 'clubes' ? 'Solicitar inscribirse' : 'Inscribirse'}
       </button>
     </div>
   );

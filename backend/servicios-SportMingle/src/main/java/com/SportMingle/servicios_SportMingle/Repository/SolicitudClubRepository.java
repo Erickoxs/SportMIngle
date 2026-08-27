@@ -11,4 +11,5 @@ public interface SolicitudClubRepository extends JpaRepository<SolicitudClub, Lo
     List<SolicitudClub> findByClubIdAndEstado(Long idClub, SolicitudClub.EstadoSolicitud estado);
     List<SolicitudClub> findByUsuario_IdUsuarioAndEstado(Long idUsuario, SolicitudClub.EstadoSolicitud estado);
 
+    boolean existsByUsuario_IdUsuarioAndClub_IdAndEstado(Long idUsuario, Long idClub, SolicitudClub.EstadoSolicitud estado);
 }

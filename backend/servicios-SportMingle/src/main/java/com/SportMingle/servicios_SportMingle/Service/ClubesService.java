@@ -67,6 +67,7 @@ public class ClubesService {
         miembro.setDeportista(administrador);
         miembro.setActivo(true);
         // miembro.setRol("ADMIN"); // si tienes ese campo
+        miembro.setRol(MiembroClub.Rol.entrenador);
         miembroClubRepository.save(miembro);
 
         return clubGuardado;

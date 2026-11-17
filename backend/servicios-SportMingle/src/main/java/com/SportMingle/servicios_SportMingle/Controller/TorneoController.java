@@ -1,25 +1,20 @@
 package com.SportMingle.servicios_SportMingle.Controller;
 
-
 import com.SportMingle.servicios_SportMingle.Model.Torneo;
+import com.SportMingle.servicios_SportMingle.Service.CloudinaryService;
 import com.SportMingle.servicios_SportMingle.Service.TorneoService;
-import com.SportMingle.servicios_SportMingle.dto.TorneoRequest;
 import com.SportMingle.servicios_SportMingle.dto.TorneoResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import com.SportMingle.servicios_SportMingle.Service.CloudinaryService; // <-- importar el servicio
-
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +22,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/torneos")
 public class TorneoController {
+
+    private static final Logger log = LoggerFactory.getLogger(TorneoController.class);
 
     private final TorneoService torneoService;
     private final CloudinaryService cloudinaryService;
@@ -88,34 +85,22 @@ public class TorneoController {
             @RequestParam(required = false) String estado,
             @RequestParam(required = false) MultipartFile imagenTorneo
     ) {
-        System.out.println("✅ Entró al controlador POST /api/torneos");
-        System.out.println("Nombre: " + nombre);
-        System.out.println("Descripción: " + descripcion);
-        System.out.println("ID Deporte: " + idDeporte);
-        System.out.println("ID Organizador: " + idOrganizador);
-        System.out.println("Fecha Inicio: " + fechaInicio);
-        System.out.println("Fecha Fin: " + fechaFin);
-        System.out.println("Lat: " + lat + " | Lon: " + lon);
-        System.out.println("Número Fases: " + numeroFases);
-        System.out.println("Premios: " + premios);
-        System.out.println("Costo Inscripción: " + costoInscripcion);
-        System.out.println("Max Equipos: " + maxEquipos);
-        System.out.println("Estado: " + estado);
-        System.out.println("¿Imagen recibida?: " + (imagenTorneo != null && !imagenTorneo.isEmpty()));
+        log.info("POST /api/torneos — nombre='{}', idOrganizador={}, idDeporte={}", nombre, idOrganizador, idDeporte);
+        log.debug("Parámetros completos — fechaInicio={}, fechaFin={}, lat={}, lon={}, fases={}, maxEquipos={}",
+                fechaInicio, fechaFin, lat, lon, numeroFases, maxEquipos);
 
         String urlImagen = null;
 
         try {
             if (imagenTorneo != null && !imagenTorneo.isEmpty()) {
-                // Subir a Cloudinary
                 Map uploadResult = cloudinaryService.uploadFile(imagenTorneo, "torneos");
-                urlImagen = uploadResult.get("secure_url").toString(); // URL pública
-                System.out.println("✅ Imagen subida a Cloudinary: " + urlImagen);
+                urlImagen = uploadResult.get("secure_url").toString();
+                log.info("Imagen subida a Cloudinary: {}", urlImagen);
             } else {
-                System.out.println("⚠️ No se recibió ninguna imagen.");
+                log.debug("No se recibió imagen para el torneo '{}'", nombre);
             }
         } catch (IOException e) {
-            System.out.println("❌ Error al subir la imagen a Cloudinary: " + e.getMessage());
+            log.error("Error al subir imagen a Cloudinary para torneo '{}': {}", nombre, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
 
@@ -124,7 +109,7 @@ public class TorneoController {
                 lat, lon, numeroFases, premios, costoInscripcion, maxEquipos, estado, urlImagen
         );
 
-        System.out.println("✅ Torneo creado con ID: " + torneo.getId());
+        log.info("Torneo creado exitosamente — id={}, nombre='{}'", torneo.getId(), torneo.getNombre());
 
         return ResponseEntity.ok(torneo);
     }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.locationtech.jts.geom.Point;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class PartidoInformalService {
     private DeporteService deporteService;
 
     public List<PartidoInformal> getAllPartidos() {
-        return partidoInformalRepository.findAll();
+        return partidoInformalRepository.findByFechaHoraGreaterThanEqualOrderByFechaHoraAsc(LocalDateTime.now());
     }
 
     public Optional<PartidoInformal> getPartidoById(Long id) {
@@ -71,7 +72,7 @@ public class PartidoInformalService {
     }
 
     public List<PartidoInformal> buscarPorDeporte(Long idDeporte) {
-        return partidoInformalRepository.findByDeporteId(idDeporte);
+        return partidoInformalRepository.findByDeporteIdAndFechaHoraGreaterThanEqualOrderByFechaHoraAsc(idDeporte, LocalDateTime.now());
     }
 
     public List<PartidoInformal> buscarPorNivelRequerido(String nivelRequerido) {

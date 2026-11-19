@@ -22,6 +22,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,12 +57,13 @@ class TorneoServiceTest {
     @DisplayName("obtenerTodos() — delega al repositorio y retorna la lista completa")
     void obtenerTodos_retornaListaDelRepositorio() {
         List<Torneo> esperados = List.of(torneoFake(1L, "Copa Bogotá"), torneoFake(2L, "Liga Norte"));
-        when(torneoRepository.findAll()).thenReturn(esperados);
+        when(torneoRepository.findByFechaFinGreaterThanEqualOrderByFechaInicioAsc(any(LocalDate.class)))
+                .thenReturn(esperados);
 
         List<Torneo> resultado = service.obtenerTodos();
 
         assertThat(resultado).hasSize(2).containsExactlyElementsOf(esperados);
-        verify(torneoRepository).findAll();
+        verify(torneoRepository).findByFechaFinGreaterThanEqualOrderByFechaInicioAsc(any(LocalDate.class));
     }
 
     // ─── obtenerPorId ──────────────────────────────────────────────────────────
@@ -110,12 +112,13 @@ class TorneoServiceTest {
     @DisplayName("obtenerPorEstado() — retorna solo los torneos con el estado dado")
     void obtenerPorEstado_filtraPorEstado() {
         List<Torneo> activos = List.of(torneoFake(1L, "Activo 1"));
-        when(torneoRepository.findByEstado(Torneo.EstadoTorneo.en_progreso)).thenReturn(activos);
+        when(torneoRepository.findByEstadoAndFechaFinGreaterThanEqual(eq(Torneo.EstadoTorneo.en_progreso), any(LocalDate.class)))
+                .thenReturn(activos);
 
         List<Torneo> resultado = service.obtenerPorEstado(Torneo.EstadoTorneo.en_progreso);
 
         assertThat(resultado).hasSize(1);
-        verify(torneoRepository).findByEstado(Torneo.EstadoTorneo.en_progreso);
+        verify(torneoRepository).findByEstadoAndFechaFinGreaterThanEqual(eq(Torneo.EstadoTorneo.en_progreso), any(LocalDate.class));
     }
 
     // ─── actualizarTorneo ─────────────────────────────────────────────────────

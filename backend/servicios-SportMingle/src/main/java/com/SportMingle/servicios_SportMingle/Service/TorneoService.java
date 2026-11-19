@@ -35,7 +35,7 @@ public class TorneoService {
     }
 
     public List<Torneo> obtenerTodos() {
-        return torneoRepository.findAll();
+        return torneoRepository.findByFechaFinGreaterThanEqualOrderByFechaInicioAsc(LocalDate.now());
     }
 
     public Optional<Torneo> obtenerPorId(Long id) {
@@ -112,11 +112,11 @@ public class TorneoService {
     }
 
     public List<Torneo> obtenerPorEstado(Torneo.EstadoTorneo estado) {
-        return torneoRepository.findByEstado(estado);
+        return torneoRepository.findByEstadoAndFechaFinGreaterThanEqual(estado, LocalDate.now());
     }
 
     public List<Torneo> obtenerPorDeporte(Long idDeporte) {
-        return torneoRepository.findByDeporteId(idDeporte);
+        return torneoRepository.findByDeporteIdAndFechaFinGreaterThanEqual(idDeporte, LocalDate.now());
     }
 
     public boolean existePorId(Long id) {

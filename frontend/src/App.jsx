@@ -10,6 +10,7 @@ import SalaChat from "./views/SalaChat";
 import VistaMiClub from "./views/VistaMiClub";
 import VistaInvitarJugador from "./views/VistaInvitarJugador";
 import VistaSolicitudes from "./views/VistasSolicitudes";
+import VistaMisPartidos from "./views/VistaMisPartidos";
 import UnirseAlClub from "./components/UnirseAlClub";
 import PrivateRoute from "./components/PrivateRoute";
 import OAuth2Redirect from "./views/OAuth2Redirect";
@@ -32,6 +33,14 @@ const App = () => {
               <Home />
               </PrivateRoute>
             
+          }
+        />
+        <Route
+          path="/mis-partidos"
+          element={
+            <PrivateRoute>
+              <VistaMisPartidos />
+            </PrivateRoute>
           }
         />
         <Route

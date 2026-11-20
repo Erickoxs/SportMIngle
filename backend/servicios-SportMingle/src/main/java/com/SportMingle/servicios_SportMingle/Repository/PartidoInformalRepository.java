@@ -15,6 +15,15 @@ public interface PartidoInformalRepository extends JpaRepository<PartidoInformal
 
     List<PartidoInformal> findByOrganizadorIdUsuario(Long idUsuario);
 
+    @Query("""
+        SELECT p FROM PartidoInformal p
+        JOIN FETCH p.deporte
+        JOIN FETCH p.organizador
+        WHERE p.organizador.idUsuario = :idUsuario
+        ORDER BY p.fechaHora DESC
+    """)
+    List<PartidoInformal> findOrganizadosPorUsuario(@Param("idUsuario") Long idUsuario);
+
     List<PartidoInformal> findByDeporteId(Long idDeporte);
 
     List<PartidoInformal> findByNivelRequerido(String nivelRequerido);

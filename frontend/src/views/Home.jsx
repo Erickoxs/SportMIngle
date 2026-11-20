@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Logo from '../components/LogoSportMingle';
 import SectionBar from '../components/SectionBar';
 import CategoryButton from '../components/CategoryButton';
@@ -14,6 +15,7 @@ const categorias = [
 ];
 
 function Home() {
+  const navigate = useNavigate();
   const [deporteSeleccionado, setDeporteSeleccionado] = useState('Fútbol');
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('partidos');
 
@@ -54,7 +56,17 @@ function Home() {
             ))}
           </div>
 
-          <LogoutButton />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              onClick={() => navigate('/mis-partidos')}
+              className="flex items-center gap-1.5 bg-[#009b3a] hover:bg-green-700 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-full shadow-sm transition"
+              title="Ver mis partidos"
+            >
+              <span>📅</span>
+              <span className="hidden sm:inline">Mis Partidos</span>
+            </button>
+            <LogoutButton />
+          </div>
         </header>
 
         <main className="mt-6 px-4 sm:px-6 md:px-12 lg:px-24 xl:px-48 max-w-screen-xl mx-auto">

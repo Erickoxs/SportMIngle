@@ -1,7 +1,10 @@
 package com.SportMingle.servicios_SportMingle.Service;
 
+import com.SportMingle.servicios_SportMingle.Model.JugadorPartidoInformal;
 import com.SportMingle.servicios_SportMingle.Model.PartidoInformal;
+import com.SportMingle.servicios_SportMingle.Repository.JugadorPartidoInformalRepository;
 import com.SportMingle.servicios_SportMingle.Repository.PartidoInformalRepository;
+import com.SportMingle.servicios_SportMingle.dto.MiPartidoResponse;
 import com.SportMingle.servicios_SportMingle.dto.PartidoInformalRequest;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -10,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -30,6 +35,9 @@ public class PartidoInformalService {
 
     @Autowired
     private DeporteService deporteService;
+
+    @Autowired
+    private JugadorPartidoInformalRepository jugadorPartidoInformalRepository;
 
     public List<PartidoInformal> getAllPartidos() {
         return partidoInformalRepository.findByFechaHoraGreaterThanEqualOrderByFechaHoraAsc(LocalDateTime.now());
@@ -92,6 +100,35 @@ public class PartidoInformalService {
 
     public boolean existePorId(Long id) {
         return partidoInformalRepository.existsById(id);
+    }
+
+    public List<MiPartidoResponse> obtenerMisPartidos(Long idUsuario) {
+        Map<Long, MiPartidoResponse> misPartidosMap = new LinkedHashMap<>();
+
+        // 1. Partidos a los que el usuario se inscribió
+        List<JugadorPartidoInformal> inscripciones = jugadorPartidoInformalRepository.findInscripcionesDeUsuario(idUsuario);
+        for (JugadorPartidoInformal j : inscripciones) {
+            PartidoInformal p = j.getPartidoInformal();
+            if (p != null) {
+                misPartidosMap.put(p.getIdPartido(), new MiPartidoResponse(p, idUsuario, j.getIdInscripcion()));
+            }
+        }
+
+        // 2. Partidos que el usuario organizó
+        List<PartidoInformal> organizados = partidoInformalRepository.findOrganizadosPorUsuario(idUsuario);
+        for (PartidoInformal p : organizados) {
+            if (p != null && !misPartidosMap.containsKey(p.getIdPartido())) {
+                misPartidosMap.put(p.getIdPartido(), new MiPartidoResponse(p, idUsuario, null));
+            }
+        }
+
+        // 3. Devolver lista ordenada por fechaHora DESC (los más recientes primero)
+        return misPartidosMap.values().stream()
+                .sorted((a, b) -> {
+                    if (a.getFechaHora() == null || b.getFechaHora() == null) return 0;
+                    return b.getFechaHora().compareTo(a.getFechaHora());
+                })
+                .toList();
     }
 }
 

@@ -2,6 +2,7 @@ package com.SportMingle.servicios_SportMingle.Controller;
 
 import com.SportMingle.servicios_SportMingle.Model.PartidoInformal;
 import com.SportMingle.servicios_SportMingle.Service.PartidoInformalService;
+import com.SportMingle.servicios_SportMingle.dto.MiPartidoResponse;
 import com.SportMingle.servicios_SportMingle.dto.PartidoInformalRequest;
 import com.SportMingle.servicios_SportMingle.dto.PartidoInformalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,13 @@ public class PartidoInformalController {
     public ResponseEntity<List<PartidoInformal>> getAllPartidos() {
         List<PartidoInformal> partidos = partidoInformalService.getAllPartidos();
         return ResponseEntity.ok(partidos);
+    }
+
+    // Obtener mis partidos (inscritos u organizados, vigentes y pasados)
+    @GetMapping("/mis-partidos/{idUsuario}")
+    public ResponseEntity<List<MiPartidoResponse>> obtenerMisPartidos(@PathVariable Long idUsuario) {
+        List<MiPartidoResponse> misPartidos = partidoInformalService.obtenerMisPartidos(idUsuario);
+        return ResponseEntity.ok(misPartidos);
     }
     @GetMapping("/cercanos")
     public ResponseEntity<List<PartidoInformalResponse>> buscarPartidosCercanos(

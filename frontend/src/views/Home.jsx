@@ -6,7 +6,7 @@ import CategoryButton from '../components/CategoryButton';
 import CreateButton from '../components/CreateButton';
 import ContentContainer from '../components/ContentContainer';
 import BotonMiClub from '../components/BotonMiClub';
-import LogoutButton from '../components/LogoutButton';
+import UserMenuDropdown from '../components/UserMenuDropdown';
 
 const categorias = [
   { id: 'partidos', texto: 'Partidos', emoji: '⚽' },
@@ -56,16 +56,8 @@ function Home() {
             ))}
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            <button
-              onClick={() => navigate('/mis-partidos')}
-              className="flex items-center gap-1.5 bg-[#009b3a] hover:bg-green-700 text-white text-xs sm:text-sm font-semibold px-3 sm:px-4 py-2 rounded-full shadow-sm transition"
-              title="Ver mis partidos"
-            >
-              <span>📅</span>
-              <span className="hidden sm:inline">Mis Partidos</span>
-            </button>
-            <LogoutButton />
+          <div className="flex items-center">
+            <UserMenuDropdown />
           </div>
         </header>
 

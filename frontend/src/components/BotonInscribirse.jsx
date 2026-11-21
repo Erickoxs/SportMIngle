@@ -3,7 +3,7 @@ import api from '../utils/api';
 import { decodeToken } from '../utils/decodeJWT';
 import { useParams } from 'react-router-dom';
 
-const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
+const BotonInscribirse = ({ categoria, idItem, deporteTorneo, className = '' }) => {
   const { id } = useParams();
 
   const handleInscribirse = async () => {
@@ -95,18 +95,12 @@ const BotonInscribirse = ({ categoria, idItem, deporteTorneo }) => {
   };
 
   return (
-    <div className="flex justify-center mt-4">
+    <div className={`w-full ${className}`}>
       <button
         onClick={handleInscribirse}
-        className="text-white px-6 py-2 rounded font-semibold transition"
-        style={{
-          backgroundColor: '#009b3a',
-          boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-        }}
-        onMouseOver={(e) => (e.target.style.backgroundColor = '#007d2f')}
-        onMouseOut={(e) => (e.target.style.backgroundColor = '#009b3a')}
+        className="w-full bg-[#009b3a] hover:bg-green-700 text-white font-bold py-3 px-6 rounded-xl shadow-md transition duration-200 active:scale-98 flex items-center justify-center gap-2 cursor-pointer text-sm sm:text-base"
       >
-        {categoria === 'clubes' ? 'Solicitar inscribirse' : 'Inscribirse'}
+        <span>{categoria === 'clubes' ? '✍️ Solicitar Ingreso' : '⚽ Inscribirme'}</span>
       </button>
     </div>
   );

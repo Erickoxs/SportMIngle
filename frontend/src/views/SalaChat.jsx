@@ -60,13 +60,10 @@ const SalaChat = () => {
       webSocketFactory: () => socket,
       reconnectDelay: 5000,
       onConnect: () => {
-
-
         // Escuchar mensajes en la sala
         client.subscribe(`/topic/chat/${idSala}`, (mensaje) => {
           try {
-             const nuevoMensaje = JSON.parse(mensaje.body);
-
+            const nuevoMensaje = JSON.parse(mensaje.body);
 
             if (nuevoMensaje.tipo === 'MENSAJE_ELIMINADO') {
               setMensajes((prev) =>
@@ -92,7 +89,7 @@ const SalaChat = () => {
     client.activate();
     setStompClient(client);
 
-     return () => {
+    return () => {
       client.deactivate();
     };
   }, [idSala, idUsuarioActual]);
@@ -111,17 +108,32 @@ const SalaChat = () => {
     }
   };
 
-  if (!idUsuarioActual) return <p>Token inválido o expirado.</p>;
-  if (cargando) return <p>Cargando sala...</p>;
+  if (!idUsuarioActual) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+        <p className="text-rose-600 font-medium">Sesión inválida o expirada. Por favor vuelve a iniciar sesión.</p>
+      </div>
+    );
+  }
+
+  if (cargando) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+        <div className="animate-spin rounded-full h-10 w-10 border-4 border-emerald-500 border-t-transparent mb-3"></div>
+        <p className="text-gray-600 text-sm font-medium">Cargando sala de chat...</p>
+      </div>
+    );
+  }
 
   return (
-<div className="flex flex-col h-screen bg-gray-50">
-      <ChatHeader nombreSala={sala.nombreSala} />
-      <MessageList mensajes={mensajes} idUsuarioActual={idUsuarioActual} idSala={idSala}/>
-      <MessageInput onEnviar={enviarMensaje} />
+    <div className="min-h-screen lg:h-screen bg-slate-100 flex flex-col justify-center items-center lg:p-4">
+      <div className="w-full max-w-4xl h-[100dvh] lg:h-[92vh] flex flex-col bg-white shadow-xl lg:rounded-2xl overflow-hidden border-0 lg:border border-gray-200">
+        <ChatHeader nombreSala={sala?.nombreSala} tipoSala={sala?.tipoSala} />
+        <MessageList mensajes={mensajes} idUsuarioActual={idUsuarioActual} idSala={idSala} />
+        <MessageInput onEnviar={enviarMensaje} />
+      </div>
     </div>
-);
-
+  );
 };
 
 export default SalaChat;

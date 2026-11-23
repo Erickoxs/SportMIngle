@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { decodeToken } from '../utils/decodeJWT';
+import api from '../utils/api';
 
 function UserMenuDropdown() {
   const [isOpen, setIsOpen] = useState(false);
+  const [clubId, setClubId] = useState(null);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
@@ -14,6 +16,23 @@ function UserMenuDropdown() {
   const nombre = usuario?.nombre || 'Usuario';
   const email = usuario?.sub || usuario?.email || '';
   const inicial = nombre.trim().charAt(0).toUpperCase() || 'U';
+
+  // Verificar si es administrador/dueño de algún club
+  useEffect(() => {
+    if (!usuario?.id || !token) return;
+
+    api.get(`/api/clubes/organizador/${usuario.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((res) => {
+        if (res.data && res.data.id) {
+          setClubId(res.data.id);
+        }
+      })
+      .catch(() => {
+        setClubId(null);
+      });
+  }, [usuario?.id, token]);
 
   // Cerrar al hacer clic fuera del dropdown
   useEffect(() => {
@@ -78,6 +97,20 @@ function UserMenuDropdown() {
               <span className="text-base">📅</span>
               <span>Mis Partidos</span>
             </button>
+
+            {/* Administrar Mi Club si es organizador */}
+            {clubId && (
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  navigate(`/mi-club/${clubId}`);
+                }}
+                className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-emerald-50 hover:text-[#009b3a] font-medium flex items-center gap-2.5 transition"
+              >
+                <span className="text-base">🛡️</span>
+                <span>Administrar Mi Club</span>
+              </button>
+            )}
           </div>
 
           {/* Cerrar Sesión */}

@@ -38,12 +38,13 @@ const BotonMiClub = ({ visible }) => {
   if (!visible || !clubId) return null;
 
   return (
-    <div className="flex justify-start ml-6 mt-2">
+    <div className="flex justify-start ml-4 sm:ml-6 mt-3">
       <button
         onClick={handleClick}
-        className="border border-yellow-300 text-black font-semibold py-2 px-4 rounded transition duration-200 hover:bg-yellow-300 hover:text-white"
+        className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl shadow-xs hover:shadow-md active:scale-95 transition-all"
       >
-        Mi Club
+        <span>🛡️</span>
+        <span>Panel de Mi Club</span>
       </button>
     </div>
   );

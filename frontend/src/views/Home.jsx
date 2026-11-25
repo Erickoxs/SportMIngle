@@ -5,7 +5,6 @@ import SectionBar from '../components/SectionBar';
 import CategoryButton from '../components/CategoryButton';
 import CreateButton from '../components/CreateButton';
 import ContentContainer from '../components/ContentContainer';
-import BotonMiClub from '../components/BotonMiClub';
 import UserMenuDropdown from '../components/UserMenuDropdown';
 
 const categorias = [
@@ -39,11 +38,6 @@ function Home() {
             <Logo />
           </div>
 
-          {/* Categories in Header for Desktop (and Mobile if suitable, or keep in main for mobile? User said "in the header") */}
-          {/* Let's put them in the center of the header for all views or just desktop? 
-              User request: "queden en el header ... con el mismo nombre ... con un emoji"
-              I will place them in the center of the header.
-          */}
           <div className="hidden md:flex flex-1 justify-center gap-4 overflow-x-auto no-scrollbar mx-4">
             {categorias.map((cat) => (
               <CategoryButton
@@ -62,7 +56,6 @@ function Home() {
         </header>
 
         <main className="mt-6 px-4 sm:px-6 md:px-12 lg:px-24 xl:px-48 max-w-screen-xl mx-auto">
-          {/* Botones de categoría removidos de aquí */}
           {/* Mobile Category Buttons (outside header, smaller) */}
           <div className="md:hidden flex flex-wrap justify-center gap-2 mb-6">
             {categorias.map((cat) => (
@@ -75,8 +68,6 @@ function Home() {
               />
             ))}
           </div>
-
-          <BotonMiClub visible={categoriaSeleccionada === 'clubes'} />
 
           <ContentContainer
             categoria={categoriaSeleccionada}

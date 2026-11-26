@@ -14,15 +14,28 @@ export function esNoCaducado(item, categoria) {
   }
 
   if (categoria === 'torneos') {
+    // Si el estado es finalizado o cancelado, ya caducó
     if (item.estado === 'finalizado' || item.estado === 'cancelado') {
       return false;
     }
-    if (item.fechaInicio) {
-      const fecha = new Date(item.fechaInicio);
-      // Mantener torneos vigentes durante todo el día de inicio
-      fecha.setHours(23, 59, 59, 999);
-      return fecha >= ahora;
+
+    // Si el torneo está en inscripciones o en progreso, está activo y vigente
+    if (item.estado === 'en_progreso' || item.estado === 'inscripciones') {
+      if (item.fechaFin) {
+        const fin = new Date(item.fechaFin);
+        fin.setHours(23, 59, 59, 999);
+        return fin >= ahora;
+      }
+      return true;
     }
+
+    // Por defecto, si tiene fechaFin comprobar que no haya pasado
+    if (item.fechaFin) {
+      const fin = new Date(item.fechaFin);
+      fin.setHours(23, 59, 59, 999);
+      return fin >= ahora;
+    }
+
     return true;
   }
 

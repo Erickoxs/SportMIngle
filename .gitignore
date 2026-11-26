@@ -8,3 +8,5 @@ frontend/.gemini/skills/interface-design/references/example.md
 frontend/.gemini/skills/interface-design/SKILL.md
 frontend/.gemini/skills/brainstorming/SKILL.md
 .agents/skills/brainstorming/SKILL.md
+scripts/test_partidos_api.py
+scripts/seed_torneo_bracket.py

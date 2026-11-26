@@ -12,6 +12,7 @@ public class TorneoResponse {
     private String nombre;
     private String descripcion;
     private LocalDate fechaInicio;
+    private LocalDate fechaFin;
     private double lat;
     private double lon;
     private String deporte;
@@ -25,6 +26,7 @@ public class TorneoResponse {
         this.nombre = torneo.getNombre();
         this.descripcion = torneo.getDescripcion();
         this.fechaInicio = torneo.getFechaInicio();
+        this.fechaFin = torneo.getFechaFin();
         this.lat = torneo.getUbicacion().getY(); // latitud
         this.lon = torneo.getUbicacion().getX(); // longitud
         this.deporte = torneo.getDeporte().getNombre();
@@ -50,8 +52,12 @@ public class TorneoResponse {
         return descripcion;
     }
 
-    public LocalDate  getFechaInicio() {
+    public LocalDate getFechaInicio() {
         return fechaInicio;
+    }
+
+    public LocalDate getFechaFin() {
+        return fechaFin;
     }
 
     public double getLat() {

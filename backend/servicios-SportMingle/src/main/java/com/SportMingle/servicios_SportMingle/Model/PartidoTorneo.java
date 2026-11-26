@@ -1,5 +1,6 @@
 package com.SportMingle.servicios_SportMingle.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -13,14 +14,17 @@ public class PartidoTorneo {
 
     @ManyToOne
     @JoinColumn(name = "id_torneo")
+    @JsonIgnoreProperties({"ubicacion", "organizador"})
     private Torneo torneo;
 
     @ManyToOne
     @JoinColumn(name = "id_equipo_local", nullable = false)
+    @JsonIgnoreProperties({"ubicacion", "administrador"})
     private Clubes equipoLocal;
 
     @ManyToOne
     @JoinColumn(name = "id_equipo_visitante", nullable = false)
+    @JsonIgnoreProperties({"ubicacion", "administrador"})
     private Clubes equipoVisitante;
 
     @Column(name = "fecha_hora", nullable = false)

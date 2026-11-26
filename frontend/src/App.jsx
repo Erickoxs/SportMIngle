@@ -11,6 +11,7 @@ import VistaMiClub from "./views/VistaMiClub";
 import VistaInvitarJugador from "./views/VistaInvitarJugador";
 import VistaSolicitudes from "./views/VistasSolicitudes";
 import VistaMisPartidos from "./views/VistaMisPartidos";
+import VistaBracketTorneo from "./views/VistaBracketTorneo";
 import UnirseAlClub from "./components/UnirseAlClub";
 import PrivateRoute from "./components/PrivateRoute";
 import OAuth2Redirect from "./views/OAuth2Redirect";
@@ -80,6 +81,14 @@ const App = () => {
           element={
             <PrivateRoute>
               <Details />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/torneo/:idTorneo/bracket"
+          element={
+            <PrivateRoute>
+              <VistaBracketTorneo />
             </PrivateRoute>
           }
         />

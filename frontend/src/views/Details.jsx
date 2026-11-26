@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 // Componentes
 import ImagenContainer from '../components/ImagenContainer';
@@ -20,6 +20,7 @@ import api from '../utils/api';
 
 function Details() {
   const { categoria, id } = useParams();
+  const navigate = useNavigate();
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -79,6 +80,13 @@ function Details() {
 
   const itemId = item.id || item.idPartido || item.idClub || item.idTorneo;
 
+  // Comprobar si el torneo ya ha comenzado (o está en progreso/finalizado)
+  const torneoHaComenzado =
+    categoria === 'torneos' &&
+    (item?.estado === 'en_progreso' ||
+      item?.estado === 'finalizado' ||
+      (item?.fechaInicio && new Date(item.fechaInicio) <= new Date()));
+
   return (
     <div className="min-h-screen bg-slate-50/70 pb-12">
       {/* Top Navbar */}
@@ -112,6 +120,17 @@ function Details() {
 
             {/* Mobile Actions Card: Visible on mobile/tablet directly under hero image */}
             <div className="lg:hidden bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-3">
+              {/* Botón Ver Bracket si el torneo ya comenzó */}
+              {torneoHaComenzado && (
+                <button
+                  onClick={() => navigate(`/torneo/${itemId}/bracket`)}
+                  className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 shadow-md hover:shadow-lg active:scale-[0.98] transition-all"
+                >
+                  <span className="text-xl">🏆</span>
+                  <span>Ver Bracket del Torneo</span>
+                </button>
+              )}
+
               <BotonInscribirse
                 categoria={categoria}
                 idItem={itemId}
@@ -162,6 +181,17 @@ function Details() {
               </div>
 
               <div className="space-y-3 pt-1">
+                {/* Botón Ver Bracket si el torneo ya comenzó */}
+                {torneoHaComenzado && (
+                  <button
+                    onClick={() => navigate(`/torneo/${itemId}/bracket`)}
+                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 shadow-md hover:shadow-lg active:scale-[0.98] transition-all"
+                  >
+                    <span className="text-xl">🏆</span>
+                    <span>Ver Bracket del Torneo</span>
+                  </button>
+                )}
+
                 <BotonInscribirse
                   categoria={categoria}
                   idItem={itemId}

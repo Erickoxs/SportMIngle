@@ -18,6 +18,7 @@ public class TorneoResponse {
     private Torneo.EstadoTorneo estado; // Deberá ser uno de: "inscripciones", "en_progreso", "finalizado", "cancelado"
     private String imagenTorneo;
     private BigDecimal costoInscripcion;
+    private Long idOrganizador;
 
     public TorneoResponse(Torneo torneo) {
         this.id = torneo.getId();
@@ -30,6 +31,9 @@ public class TorneoResponse {
         this.estado = torneo.getEstado();
         this.imagenTorneo = torneo.getImagenTorneo();
         this.costoInscripcion = torneo.getCostoInscripcion();
+        if (torneo.getOrganizador() != null) {
+            this.idOrganizador = torneo.getOrganizador().getIdUsuario();
+        }
     }
 
     // Getters
@@ -72,6 +76,10 @@ public class TorneoResponse {
 
     public Torneo.EstadoTorneo getEstado() {
         return estado;
+    }
+
+    public Long getIdOrganizador() {
+        return idOrganizador;
     }
 
 }

@@ -120,23 +120,29 @@ function Details() {
 
             {/* Mobile Actions Card: Visible on mobile/tablet directly under hero image */}
             <div className="lg:hidden bg-white p-4 rounded-2xl shadow-sm border border-gray-100 space-y-3">
-              {/* Botón Ver Bracket si el torneo ya comenzó */}
-              {torneoHaComenzado && (
-                <button
-                  onClick={() => navigate(`/torneo/${itemId}/bracket`)}
-                  className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 shadow-md hover:shadow-lg active:scale-[0.98] transition-all"
-                >
-                  <span className="text-xl">🏆</span>
-                  <span>Ver Bracket del Torneo</span>
-                </button>
+              {/* Botón Ver Bracket si el torneo ya comenzó, o botón de inscribirse si aún no inicia */}
+              {torneoHaComenzado ? (
+                <>
+                  <button
+                    onClick={() => navigate(`/torneo/${itemId}/bracket`)}
+                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 shadow-md hover:shadow-lg active:scale-[0.98] transition-all"
+                  >
+                    <span className="text-xl">🏆</span>
+                    <span>Ver Bracket del Torneo</span>
+                  </button>
+                  <div className="bg-amber-50 text-amber-800 text-xs font-semibold py-2 px-3 rounded-xl border border-amber-200 text-center">
+                    🔒 Inscripciones cerradas (Torneo en curso)
+                  </div>
+                </>
+              ) : (
+                <BotonInscribirse
+                  categoria={categoria}
+                  idItem={itemId}
+                  deporteTorneo={item.deporte}
+                  className="w-full text-center"
+                />
               )}
 
-              <BotonInscribirse
-                categoria={categoria}
-                idItem={itemId}
-                deporteTorneo={item.deporte}
-                className="w-full text-center"
-              />
               <ChatButton
                 tipoSala={categoria}
                 idReferencia={itemId}
@@ -181,23 +187,28 @@ function Details() {
               </div>
 
               <div className="space-y-3 pt-1">
-                {/* Botón Ver Bracket si el torneo ya comenzó */}
-                {torneoHaComenzado && (
-                  <button
-                    onClick={() => navigate(`/torneo/${itemId}/bracket`)}
-                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 shadow-md hover:shadow-lg active:scale-[0.98] transition-all"
-                  >
-                    <span className="text-xl">🏆</span>
-                    <span>Ver Bracket del Torneo</span>
-                  </button>
+                {/* Botón Ver Bracket si el torneo ya comenzó, o botón de inscribirse si aún no inicia */}
+                {torneoHaComenzado ? (
+                  <>
+                    <button
+                      onClick={() => navigate(`/torneo/${itemId}/bracket`)}
+                      className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-white bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 shadow-md hover:shadow-lg active:scale-[0.98] transition-all"
+                    >
+                      <span className="text-xl">🏆</span>
+                      <span>Ver Bracket del Torneo</span>
+                    </button>
+                    <div className="bg-amber-50 text-amber-800 text-xs font-semibold py-2 px-3 rounded-xl border border-amber-200 text-center">
+                      🔒 Inscripciones cerradas (Torneo en curso)
+                    </div>
+                  </>
+                ) : (
+                  <BotonInscribirse
+                    categoria={categoria}
+                    idItem={itemId}
+                    deporteTorneo={item.deporte}
+                    className="w-full justify-center text-center"
+                  />
                 )}
-
-                <BotonInscribirse
-                  categoria={categoria}
-                  idItem={itemId}
-                  deporteTorneo={item.deporte}
-                  className="w-full justify-center text-center"
-                />
 
                 <ChatButton
                   tipoSala={categoria}
